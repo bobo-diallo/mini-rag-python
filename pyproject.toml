@@ -11,5 +11,7 @@ dev = ["pytest>=8"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Deux fichiers de test de même nom dans des dossiers différents ne se télescopent plus.
+addopts = ["--import-mode=importlib"]
 # Permet d'écrire « from mini_rag import ... » dans les tests sans installer le paquet.
 pythonpath = ["src"]

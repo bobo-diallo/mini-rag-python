@@ -29,7 +29,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - **Test de réussite :** même nombre de chunks que la version TypeScript sur un même PDF fictif
 
 - [x] Conventions de structure d'un projet Python : `docs/python/05-structure-projet.md`
-- [ ] Types du domaine (`Source`, `PageText`, `Chunk`) dans `mini_rag/domain/`
+- [x] Types du domaine (`Source`, `PageText`, `Chunk`) dans `mini_rag/domain/`
 - [ ] Découpeur maison (taille 1000, chevauchement 200, un chunk ne franchit pas une page)
 - [ ] Comparaison avec `langchain-text-splitters` (référence de test uniquement)
 - [ ] Lecteur PDF (`pypdf`) testé sur un PDF fictif
