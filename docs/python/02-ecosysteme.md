@@ -21,6 +21,17 @@
 | Typage statique | `mypy` ou `pyright` | `tsc` | 2 | vérifier les annotations, optionnel mais recommandé |
 | Style et erreurs bêtes | `ruff` | ESLint + Prettier | 2 | un seul outil rapide pour lint et format |
 | Agents et outils | boucle maison, puis éventuellement `langgraph` | — | 4 | maison d'abord pour comprendre la boucle |
+| Modèles ouverts (catalogue) | Hugging Face Hub | — | 2b | trouver un modèle, lire sa fiche et sa licence |
+| Charger des modèles | `transformers` | — | 2b | utiliser un modèle ouvert en local |
+| Embeddings et reranker | `sentence-transformers` | — | 2b-3 | alternative à Ollama pour `bge-m3` ; cross-encoder pour reclasser |
+| Jeux de données | `datasets` | — | 2b | charger des données publiques d'évaluation |
+| Démo web rapide | `gradio` (Space HF) | — | 2b | montrer un projet avec une interface en quelques lignes |
+| OCR classique | Tesseract (via `pytesseract`) | — | 3b | lire le texte d'une image, comparé aux modèles de vision |
+| Modèle de vision | VLM ouvert (HF) ou Claude vision | — | 3b | extraire les champs d'une facture directement depuis l'image |
+| Export de données | `csv` (livré) et `openpyxl` | — | 3b | écrire le résultat en CSV ou Excel |
+| Fine-tuning léger | `peft` (LoRA) | — | 3c | adapter un petit modèle, seulement si la mesure le justifie |
+| Serveur d'outils | SDK `mcp` | — | 4 | exposer des outils à un assistant de façon standard |
+| Traces et coûts | à choisir en phase 5 (ex. Langfuse) | — | 5 | observabilité des appels de modèle |
 | Conteneur | Docker | Docker | 5 | emballage et déploiement |
 
 ## Règles de choix
