@@ -33,4 +33,4 @@ Portage en Python du projet `mini-rag-local` (TypeScript, dossier voisin), puis 
 - [ ] Phase 7 : métier de consultant (grille d'audit, 3 cas fictifs)
 
 ## Documentation
-`docs/feuille-de-route.md` · `docs/suivi-stories.md` · `docs/journal.md` · `docs/python/01-fondamentaux.md` · `docs/python/02-ecosysteme.md` · `docs/python/03-erreurs-et-debogage.md` · `docs/python/04-glossaire.md`
+`docs/feuille-de-route.md` · `docs/suivi-stories.md` · `docs/journal.md` · `docs/python/01-fondamentaux.md` · `docs/python/02-ecosysteme.md` · `docs/python/03-erreurs-et-debogage.md` · `docs/python/04-glossaire.md` · `docs/python/05-structure-projet.md`
