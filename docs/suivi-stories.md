@@ -12,5 +12,15 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Documentation : fondamentaux Python, carte de l'écosystème, erreurs et débogage
 - [x] Feuille de route, suivi, journal, `CLAUDE.md`, README
 
+## Story 00b — Feuille de route étendue et glossaire
+- **Branche :** `story/00b-feuille-de-route-et-glossaire`
+- **PR :** — (sur `/push`)
+- **Statut :** 🔄 en cours
+
+- [x] Feuille de route étendue (phases 2b, 3b, 3c, 7) validée
+- [x] Glossaire `docs/python/04-glossaire.md` (jargon expliqué pour un développeur web)
+- [x] Règle de pédagogie ajoutée à la feuille de route et au `CLAUDE.md`
+- [x] Lignes HF, vision, `peft`, MCP, observabilité dans `02-ecosysteme.md`
+
 ## Story 01 — Lecture de PDF et découpage
 - **Statut :** 📋 prévue (plan à présenter et valider avant de coder)
