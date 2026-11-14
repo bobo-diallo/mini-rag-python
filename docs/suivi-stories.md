@@ -30,8 +30,8 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 
 - [x] Conventions de structure d'un projet Python : `docs/python/05-structure-projet.md`
 - [x] Types du domaine (`Source`, `PageText`, `Chunk`) dans `mini_rag/domain/`
-- [ ] Découpeur maison (taille 1000, chevauchement 200, un chunk ne franchit pas une page)
-- [ ] Comparaison avec `langchain-text-splitters` (référence de test uniquement)
+- [x] Découpeur maison récursif (taille 1000, chevauchement 200, un chunk ne franchit pas une page)
+- [x] Comparaison avec `langchain-text-splitters` (référence de test uniquement) : mêmes extraits sur 6 textes × 4 réglages
 - [ ] Lecteur PDF (`pypdf`) testé sur un PDF fictif
 - [ ] Commande de comptage (`[project.scripts]`) et comparaison avec la version TypeScript
 - [ ] Glossaire et carte de l'écosystème mis à jour
