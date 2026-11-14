@@ -9,11 +9,11 @@ Portage en Python du projet `mini-rag-local` (TypeScript, dossier voisin), puis 
 - Détail et justification de chaque outil : `docs/python/02-ecosysteme.md`
 
 ## Conventions
-- Communication et documentation en français ; identifiants techniques en anglais.
+- Communication et documentation en français ; **tout ce qui est technique en anglais** (branches, fichiers de code, variables, fonctions, classes, noms de tests) ; seuls les commentaires du code peuvent être en français.
 - DDD / TDD / SOLID ; le test avant le code ; un changement à la fois, mesure avant/après.
 - **Documentation avec le code** : chaque story met à jour `docs/` (fondamentaux, carte de l'écosystème, suivi, feuille de route).
 - Aucun bloc généré n'est accepté sans pouvoir l'expliquer ; un bug corrigé à la main par projet (`docs/journal.md`).
-- Git : `main` seule branche longue ; une branche par story `story/<nn>-<résumé>` créée avant de modifier ; commits libres, message préfixé `<branche>: ` ; **jamais de ligne Co-Authored-By** ; push, PR et fusion seulement sur `/push`.
+- Git : `main` seule branche longue ; une branche par story `story/<nn>-<short-summary>` (en anglais) créée avant de modifier ; commits libres, message préfixé `<branche>: ` ; **jamais de ligne Co-Authored-By** ; push, PR et fusion seulement sur `/push`.
 - `data/`, `index/`, `.env`, `docs/prive/` ne sont jamais commités. Ne jamais lire de documents privés avec les outils de l'assistant. Ne jamais fabriquer de données.
 - **Pédagogie** : l'utilisateur est développeur web (PHP, Java) et découvre l'écosystème IA. Tout terme nouveau (training, MCP, embedding...) est expliqué simplement à sa première apparition, avec une analogie web si utile, puis ajouté à `docs/python/04-glossaire.md`. On n'est pas pressé.
 - Toujours activer l'environnement avant de travailler : `source .venv/bin/activate`.

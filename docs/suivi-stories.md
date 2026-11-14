@@ -34,5 +34,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Comparaison avec `langchain-text-splitters` (référence de test uniquement) : mêmes extraits sur 6 textes × 4 réglages
 - [x] Lecteur PDF (`pypdf`) testé sur un PDF fictif (copié du projet TypeScript, texte fictif vérifié)
 - [x] Pipeline d'intégration continue (GitHub Actions) : `pytest` à chaque PR vers `main` et à chaque mise à jour de `main`
-- [ ] Commande de comptage (`[project.scripts]`) et comparaison avec la version TypeScript
-- [ ] Glossaire et carte de l'écosystème mis à jour
+- [x] Commande de comptage `mini-rag-chunks` (`[project.scripts]`)
+- [x] **Test de réussite atteint** : sur `tests/fixtures/rapport-fictif.pdf` (6 pages, généré par `scripts/generer_pdf_fictif.py`), Python et TypeScript donnent les mêmes résultats : 29 chunks, taille moyenne 877, min 354, max 999
+- [x] Glossaire et carte de l'écosystème mis à jour
+- [ ] Mise en conformité avec la règle « tout en anglais sauf les commentaires » (branche, noms de tests et de variables)
