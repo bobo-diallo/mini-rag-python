@@ -14,8 +14,8 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 
 ## Story 00b — Feuille de route étendue et glossaire
 - **Branche :** `story/00b-feuille-de-route-et-glossaire`
-- **PR :** — (sur `/push`)
-- **Statut :** 🔄 en cours
+- **PR :** [#1](https://github.com/bobo-diallo/mini-rag-python/pull/1), fusionnée le 2026-11-13
+- **Statut :** ✅ terminée
 
 - [x] Feuille de route étendue (phases 2b, 3b, 3c, 7) validée
 - [x] Glossaire `docs/python/04-glossaire.md` (jargon expliqué pour un développeur web)
@@ -23,4 +23,18 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Lignes HF, vision, `peft`, MCP, observabilité dans `02-ecosysteme.md`
 
 ## Story 01 — Lecture de PDF et découpage
-- **Statut :** 📋 prévue (plan à présenter et valider avant de coder)
+- **Branche :** `story/01-pdf-loading-and-chunking`
+- **PR :** à renseigner après la fusion
+- **Statut :** ✅ terminée (fusion lancée par `/push`)
+- **Test de réussite :** même nombre de chunks que la version TypeScript sur un même PDF fictif
+
+- [x] Conventions de structure d'un projet Python : `docs/python/05-structure-projet.md`
+- [x] Types du domaine (`Source`, `PageText`, `Chunk`) dans `mini_rag/domain/`
+- [x] Découpeur maison récursif (taille 1000, chevauchement 200, un chunk ne franchit pas une page)
+- [x] Comparaison avec `langchain-text-splitters` (référence de test uniquement) : mêmes extraits sur 6 textes × 4 réglages
+- [x] Lecteur PDF (`pypdf`) testé sur un PDF fictif (copié du projet TypeScript, texte fictif vérifié)
+- [x] Pipeline d'intégration continue (GitHub Actions) : `pytest` à chaque PR vers `main` et à chaque mise à jour de `main`
+- [x] Commande de comptage `mini-rag-chunks` (`[project.scripts]`)
+- [x] **Test de réussite atteint** : sur `tests/fixtures/fictional-report.pdf` (6 pages, généré par `scripts/generate_fictional_pdf.py`), Python et TypeScript donnent les mêmes résultats : 29 chunks, taille moyenne 877, min 354, max 999
+- [x] Glossaire et carte de l'écosystème mis à jour
+- [x] Mise en conformité avec la règle « tout en anglais sauf les commentaires » (branche, fichiers, noms de tests et de variables)

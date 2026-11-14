@@ -1,0 +1,31 @@
+name: Tests
+
+# Quand le lancer : à chaque pull request vers main, et à chaque mise à jour de main.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Droits minimaux : le pipeline peut seulement lire le code.
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip # réutilise les paquets téléchargés d'un lancement à l'autre
+
+      - name: Installer le projet et ses dépendances de développement
+        run: pip install -e ".[dev]"
+
+      - name: Lancer les tests
+        run: pytest -v

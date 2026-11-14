@@ -4,12 +4,24 @@ version = "0.1.0"
 description = "Mini-RAG en Python : portage du mini-RAG TypeScript, puis service LLM et agent. Projet d'apprentissage documenté."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pypdf>=7",  # lecture des PDF, page par page
+]
+
+[project.scripts]
+# Après `pip install -e .`, la commande `mini-rag-chunks` lance la fonction `main` de mini_rag/cli.py.
+mini-rag-chunks = "mini_rag.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = [
+    "pytest>=8",
+    # Référence de test uniquement : notre découpeur maison doit donner les mêmes extraits.
+    "langchain-text-splitters>=1.1",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Deux fichiers de test de même nom dans des dossiers différents ne se télescopent plus.
+addopts = ["--import-mode=importlib"]
 # Permet d'écrire « from mini_rag import ... » dans les tests sans installer le paquet.
 pythonpath = ["src"]

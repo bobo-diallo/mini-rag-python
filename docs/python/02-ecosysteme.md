@@ -12,7 +12,7 @@
 | Validation de données | `pydantic` | Zod / interfaces | 1 | schémas d'entrée/sortie, JSON de modèle à valider |
 | Réglages depuis `.env` | `pydantic-settings` | `config.ts` + `.env` | 1 | une seule classe de configuration centralisée |
 | Lecture de PDF | `pypdf` | `pdf-parse` | 1 | extraire le texte page par page |
-| Découpage de texte | fonction maison ou `langchain-text-splitters` | LangChain.js | 1 | maison d'abord (on comprend), bibliothèque ensuite si utile |
+| Découpage de texte | fonction maison (`ingestion/chunker.py`) ; `langchain-text-splitters` comme référence de test seulement | LangChain.js | 1 | maison d'abord (on comprend) ; la bibliothèque vérifie qu'on obtient les mêmes extraits |
 | Embeddings et modèle local | client `ollama` ou HTTP avec `httpx` | `@langchain/ollama` | 1 | `bge-m3` et un modèle ~3B comme dans l'autre projet |
 | Base d'index | `sqlite3` (livré avec Python) + `sqlite-vec` | `better-sqlite3` + sqlite-vec | 1 | même choix que le projet TypeScript : un seul fichier |
 | Appels HTTP | `httpx` | `fetch` | 1-2 | synchrone ou asynchrone avec la même API |
