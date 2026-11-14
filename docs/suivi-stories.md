@@ -33,5 +33,6 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Découpeur maison récursif (taille 1000, chevauchement 200, un chunk ne franchit pas une page)
 - [x] Comparaison avec `langchain-text-splitters` (référence de test uniquement) : mêmes extraits sur 6 textes × 4 réglages
 - [x] Lecteur PDF (`pypdf`) testé sur un PDF fictif (copié du projet TypeScript, texte fictif vérifié)
+- [x] Pipeline d'intégration continue (GitHub Actions) : `pytest` à chaque PR vers `main` et à chaque mise à jour de `main`
 - [ ] Commande de comptage (`[project.scripts]`) et comparaison avec la version TypeScript
 - [ ] Glossaire et carte de l'écosystème mis à jour

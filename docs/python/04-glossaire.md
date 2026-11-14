@@ -144,6 +144,8 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 
 **Loi 25 / RGPD** : les lois sur la protection des renseignements personnels (Québec / Europe). Elles encadrent ce qu'on peut envoyer à un service d'IA externe et comment protéger les données.
 
+**Intégration continue (CI) / GitHub Actions** : un pipeline automatique qui, à chaque push ou pull request, reprend le code sur une machine vierge, installe les dépendances et lance les tests. Il révèle ce que ta machine cache (une dépendance oubliée, un fichier absent du dépôt) et rend visible, sur la PR, si les tests passent. Chez GitHub, le pipeline se décrit dans `.github/workflows/*.yml`.
+
 **Build vs buy** : construire soi-même une solution ou acheter/utiliser un produit existant. Un consultant doit savoir recommander l'un ou l'autre selon le cas.
 
 **ROI (retour sur investissement)** : ce que la solution rapporte (temps gagné, erreurs évitées) comparé à ce qu'elle coûte à construire et à faire tourner.
