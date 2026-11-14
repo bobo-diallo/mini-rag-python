@@ -8,6 +8,10 @@ __pycache__/
 .env
 .DS_Store
 
+# Réglages d'éditeur : personnels, jamais publiés
+.vscode/
+.idea/
+
 # Documents des utilisateurs et index générés : jamais publiés
 data/
 index/
