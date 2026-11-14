@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Mini-RAG en Python : portage du mini-RAG TypeScript, puis service LLM et agent. Projet d'apprentissage documenté."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pypdf>=7",  # lecture des PDF, page par page
+]
 
 [project.optional-dependencies]
 dev = [
