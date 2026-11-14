@@ -45,8 +45,8 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - **Statut :** 🔄 en cours (plan validé)
 - **Test de réussite :** rang des bonnes pages sur les questions d'évaluation (hit@3 et MRR mesurés avec `bge-m3`, corpus fictif)
 
-- [ ] `cosine_similarity` (vecteurs proches, opposés, dimensions différentes, vecteur nul)
-- [ ] `InMemoryVectorStore` : ajouter, chercher les `k` plus proches, trié du meilleur au moins bon
+- [x] `cosine_similarity` (vecteurs proches, opposés, dimensions différentes, vecteur nul)
+- [x] `InMemoryVectorStore` : ajouter, chercher les `k` plus proches, trié du meilleur au moins bon
 - [ ] Interface `Embedder` et traitement par lots (faux embedder pour les tests)
 - [ ] `OllamaEmbedder` (`httpx`), testé sans réseau, plus un test d'intégration sauté si Ollama est absent
 - [ ] `Retriever` : indexer des chunks, chercher une question

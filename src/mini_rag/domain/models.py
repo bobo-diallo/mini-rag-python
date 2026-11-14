@@ -36,3 +36,11 @@ class Chunk:
     def id(self) -> str:
         """Identifiant stable et unique : `<fichier>#p<page>-c<n>`."""
         return f"{self.source.file}#p{self.source.page}-c{self.index}"
+
+
+@dataclass(frozen=True)
+class SearchResult:
+    """Un chunk retrouvé par une recherche, avec son score de proximité (cosinus, de -1 à 1)."""
+
+    chunk: Chunk
+    score: float
