@@ -32,6 +32,12 @@ def chunk_pages(pages: Sequence[PageText], options: ChunkOptions = ChunkOptions(
 
 
 def _split_text(text: str, options: ChunkOptions) -> list[str]:
-    if len(text) <= options.size:
-        return [text]
-    raise NotImplementedError("Découpage des textes longs : prochain test.")
+    """Fenêtre glissante : on avance de (taille - chevauchement) caractères à chaque extrait."""
+    pieces: list[str] = []
+    start = 0
+    while True:
+        end = min(start + options.size, len(text))
+        pieces.append(text[start:end])
+        if end == len(text):  # la fin du texte est atteinte : un extrait de plus serait un doublon
+            return pieces
+        start = end - options.overlap
