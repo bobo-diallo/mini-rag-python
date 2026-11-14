@@ -5,7 +5,7 @@ from pathlib import Path
 from mini_rag.ingestion.chunker import chunk_pages
 from mini_rag.ingestion.pdf_loader import PdfLoader
 
-FICTIONAL_REPORT = Path(__file__).parent.parent / "fixtures" / "rapport-fictif.pdf"
+FICTIONAL_REPORT = Path(__file__).parent.parent / "fixtures" / "fictional-report.pdf"
 
 
 def test_fictional_report_gives_the_same_statistics_as_the_typescript_version():

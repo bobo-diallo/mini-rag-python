@@ -21,7 +21,8 @@ Portage en Python du projet `mini-rag-local` (TypeScript, dossier voisin), puis 
 ## Avancement
 - [x] Story 00 : socle, tests, documentation de départ
 - [ ] Phase 1 : portage du mini-RAG (stories 01 à 06, détail dans `docs/feuille-de-route.md`)
-- [x] Story 00b : feuille de route étendue + glossaire (en cours, PR sur `/push`)
+- [x] Story 00b : feuille de route étendue + glossaire (PR #1)
+- [x] Story 01 : lecture de PDF et découpage, parité avec la version TypeScript (29 chunks sur un PDF fictif)
 - [ ] Phase 2b : Hugging Face et modèles ouverts
 - [ ] Phase 2 : LLM en production
 - [ ] Phase 3 : RAG évalué

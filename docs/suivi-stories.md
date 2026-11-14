@@ -23,9 +23,9 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Lignes HF, vision, `peft`, MCP, observabilité dans `02-ecosysteme.md`
 
 ## Story 01 — Lecture de PDF et découpage
-- **Branche :** `story/01-lecture-pdf-et-decoupage`
-- **PR :** — (sur `/push`)
-- **Statut :** 🔄 en cours (plan validé)
+- **Branche :** `story/01-pdf-loading-and-chunking`
+- **PR :** à renseigner après la fusion
+- **Statut :** ✅ terminée (fusion lancée par `/push`)
 - **Test de réussite :** même nombre de chunks que la version TypeScript sur un même PDF fictif
 
 - [x] Conventions de structure d'un projet Python : `docs/python/05-structure-projet.md`
@@ -35,6 +35,6 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Lecteur PDF (`pypdf`) testé sur un PDF fictif (copié du projet TypeScript, texte fictif vérifié)
 - [x] Pipeline d'intégration continue (GitHub Actions) : `pytest` à chaque PR vers `main` et à chaque mise à jour de `main`
 - [x] Commande de comptage `mini-rag-chunks` (`[project.scripts]`)
-- [x] **Test de réussite atteint** : sur `tests/fixtures/rapport-fictif.pdf` (6 pages, généré par `scripts/generer_pdf_fictif.py`), Python et TypeScript donnent les mêmes résultats : 29 chunks, taille moyenne 877, min 354, max 999
+- [x] **Test de réussite atteint** : sur `tests/fixtures/fictional-report.pdf` (6 pages, généré par `scripts/generate_fictional_pdf.py`), Python et TypeScript donnent les mêmes résultats : 29 chunks, taille moyenne 877, min 354, max 999
 - [x] Glossaire et carte de l'écosystème mis à jour
-- [ ] Mise en conformité avec la règle « tout en anglais sauf les commentaires » (branche, noms de tests et de variables)
+- [x] Mise en conformité avec la règle « tout en anglais sauf les commentaires » (branche, fichiers, noms de tests et de variables)
