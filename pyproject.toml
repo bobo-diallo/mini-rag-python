@@ -8,6 +8,10 @@ dependencies = [
     "pypdf>=7",  # lecture des PDF, page par page
 ]
 
+[project.scripts]
+# Après `pip install -e .`, la commande `mini-rag-chunks` lance la fonction `main` de mini_rag/cli.py.
+mini-rag-chunks = "mini_rag.cli:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
