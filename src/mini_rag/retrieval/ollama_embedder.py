@@ -12,8 +12,8 @@ class OllamaEmbedder(Embedder):
 
     def __init__(
         self,
-        model: str = "bge-m3",
-        base_url: str = "http://localhost:11434",
+        model: str,
+        base_url: str,
         timeout: float = 60.0,
         client: httpx.Client | None = None,
     ) -> None:

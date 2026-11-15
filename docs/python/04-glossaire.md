@@ -152,5 +152,29 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 
 ---
 
+## 9. Python et pratiques de développement
+
+**Module et paquet** : un module est un fichier `.py` ; un paquet est un dossier de modules (avec un `__init__.py`). Python n'impose pas une classe par fichier : on regroupe ce qui va ensemble. Tout nom défini au niveau d'un fichier peut être importé ; un nom qui commence par `_` est privé *par convention*.
+
+**Décorateur (`@...`)** : une ligne au-dessus d'une fonction ou d'une classe qui lui ajoute un comportement. Exemples vus : `@dataclass` (fabrique le constructeur), `@property` (rend une méthode lisible comme un attribut), `@abstractmethod`, `@pytest.mark.ollama`.
+
+**Interface : `Protocol` et `@abstractmethod`** : un contrat qui décrit les méthodes qu'un objet doit avoir. Une classe peut le **déclarer** (`class OllamaEmbedder(Embedder)`) : si elle oublie une méthode marquée `@abstractmethod`, sa création échoue (`TypeError`), comme en Java. Un simple faux, lui, peut seulement avoir les bonnes méthodes : c'est le typage *structurel* (« duck typing »). Le reste du code dépend du contrat, jamais d'une classe précise.
+
+**Injection de dépendances** : une classe ou une fonction reçoit ce dont elle a besoin (un `Embedder`, un client HTTP) au lieu de le fabriquer elle-même. Ça permet de brancher un faux dans les tests, ou un autre modèle en production.
+
+**Faux (*fake*) et faux serveur (*mock*)** : un objet de test qui remplace un vrai composant, en plus rapide et prévisible. `httpx.MockTransport` remplace le réseau : le test s'exécute sans Ollama.
+
+**Fixture** : un objet préparé, que `pytest` fournit aux tests qui le nomment dans leurs paramètres. Les fixtures partagées vivent dans `conftest.py`.
+
+**Marqueur (`@pytest.mark.xxx`)** : une étiquette sur un test, pour le sélectionner (`pytest -m xxx`) ou l'exclure (`-m "not xxx"`). Elle se déclare dans `pyproject.toml`. Elle ne saute rien toute seule : le saut vient de `pytest.skip(...)`.
+
+**Fermeture (*closure*)** : une fonction définie à l'intérieur d'une autre peut lire et modifier les objets de la fonction englobante. C'est ainsi qu'un faux serveur de test « note » ce qu'il reçoit.
+
+**Variable d'environnement** : un réglage fourni au programme par son contexte (terminal, serveur), pas écrit dans le code. Permet une adresse différente sur ta machine, en test et en production sans modifier le code.
+
+**`.env` et `.env.example`** : `.env` contient tes réglages personnels et reste sur ta machine (ignoré par git, parce qu'il peut contenir des secrets). `.env.example` est le modèle publié, qui documente les variables existantes. `pydantic-settings` lit les variables d'environnement puis le `.env`, valide les types (un lot de taille 0 est refusé) et applique des valeurs par défaut.
+
+**Intégration continue (CI)** : voir la section 8.
+
 ## Entrées à ajouter au fil des stories
 Cette liste se complète à chaque story : chaque nouveau terme y entre le jour où on le rencontre.

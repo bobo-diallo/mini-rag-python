@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "pypdf>=7",  # lecture des PDF, page par page
     "httpx>=0.28",  # appels HTTP vers Ollama
+    "pydantic-settings>=2",  # configuration lue depuis l'environnement et .env
 ]
 
 [project.scripts]

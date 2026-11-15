@@ -49,6 +49,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] `InMemoryVectorStore` : ajouter, chercher les `k` plus proches, trié du meilleur au moins bon
 - [x] Interface `Embedder` et traitement par lots (faux embedder pour les tests)
 - [x] `OllamaEmbedder` (`httpx`), testé sans réseau, plus un test d'intégration sauté si Ollama est absent
+- [x] Étape 4b : contrat `Embedder` obligatoire (`@abstractmethod`, déclaré par `OllamaEmbedder`) et configuration centralisée (`Settings`, `.env.example`), valeurs d'adresse et de modèle retirées des classes
 - [ ] `Retriever` : indexer des chunks, chercher une question
 - [ ] Corpus fictif thématique (PDF de 6 pages) et 10 questions formulées sans les mots de la page
 - [ ] Commande de mesure : rang de chaque question, hit@3, MRR
