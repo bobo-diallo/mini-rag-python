@@ -1,5 +1,6 @@
 """Embeddings : transformer du texte en vecteurs qui représentent son sens."""
 
+from abc import abstractmethod
 from collections.abc import Callable, Sequence
 from typing import Protocol
 
@@ -16,14 +17,19 @@ class Embedder(Protocol):
 
     C'est une *interface* : le reste du code dépend de ces deux méthodes, jamais d'un modèle précis.
     Changer de modèle (Ollama, Hugging Face...) ou utiliser un faux dans les tests ne touche donc
-    à aucune autre ligne. Un `Protocol` n'a pas besoin qu'on déclare « implémente Embedder » :
-    il suffit d'avoir les bonnes méthodes (typage « structurel »).
+    à aucune autre ligne.
+
+    Deux façons de le respecter : un simple faux (tests) n'a qu'à avoir les bonnes méthodes (typage
+    « structurel ») ; une vraie implémentation le **déclare** (`class OllamaEmbedder(Embedder)`),
+    et `@abstractmethod` fait alors échouer sa création si elle oublie une méthode, comme en Java.
     """
 
+    @abstractmethod
     def embed_documents(self, texts: Sequence[str]) -> list[list[float]]:
         """Un vecteur par texte, dans le même ordre."""
         ...
 
+    @abstractmethod
     def embed_query(self, text: str) -> list[float]:
         """Le vecteur d'une question."""
         ...

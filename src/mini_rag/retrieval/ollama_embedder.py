@@ -4,10 +4,10 @@ from collections.abc import Sequence
 
 import httpx
 
-from mini_rag.retrieval.embedder import EmbeddingError
+from mini_rag.retrieval.embedder import Embedder, EmbeddingError
 
 
-class OllamaEmbedder:
+class OllamaEmbedder(Embedder):
     """Appelle l'API d'Ollama (`POST /api/embed`) : aucun texte ne quitte ta machine."""
 
     def __init__(
