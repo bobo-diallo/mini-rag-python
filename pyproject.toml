@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "pypdf>=7",  # lecture des PDF, page par page
+    "httpx>=0.28",  # appels HTTP vers Ollama
 ]
 
 [project.scripts]
@@ -23,5 +24,6 @@ dev = [
 testpaths = ["tests"]
 # Deux fichiers de test de même nom dans des dossiers différents ne se télescopent plus.
 addopts = ["--import-mode=importlib"]
+markers = ["ollama: test d'intégration qui exige un serveur Ollama avec le modèle bge-m3"]
 # Permet d'écrire « from mini_rag import ... » dans les tests sans installer le paquet.
 pythonpath = ["src"]

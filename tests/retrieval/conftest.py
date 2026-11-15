@@ -25,3 +25,16 @@ class FakeEmbedder:
 @pytest.fixture
 def fake_embedder() -> FakeEmbedder:
     return FakeEmbedder()
+
+
+@pytest.fixture(scope="session")
+def real_ollama_url() -> str:
+    """Adresse du vrai Ollama, ou saut du test si le serveur n'est pas joignable."""
+    import httpx
+
+    url = "http://localhost:11434"
+    try:
+        httpx.get(f"{url}/api/version", timeout=2.0)
+    except httpx.HTTPError:
+        pytest.skip("Ollama n'est pas joignable : test d'intégration sauté")
+    return url

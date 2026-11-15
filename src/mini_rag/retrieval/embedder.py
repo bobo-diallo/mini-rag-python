@@ -4,6 +4,13 @@ from collections.abc import Callable, Sequence
 from typing import Protocol
 
 
+class EmbeddingError(RuntimeError):
+    """Le calcul des vecteurs a échoué (serveur absent, modèle introuvable, réponse inattendue...).
+
+    Tout embedder lève cette erreur-là : le reste du code n'a pas à connaître celles de `httpx`.
+    """
+
+
 class Embedder(Protocol):
     """Tout objet qui sait transformer du texte en vecteurs.
 
