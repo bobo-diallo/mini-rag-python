@@ -32,3 +32,20 @@ def _parse_entry(number: int, entry: object) -> EvalQuestion:
     if not isinstance(page, int) or isinstance(page, bool) or page < 1:
         raise ValueError(f"Entrée n° {number} : « expected_page » doit être un entier d'au moins 1.")
     return EvalQuestion(question=question, expected_page=page)
+
+
+def load_out_of_scope_questions(path: str | Path) -> list[str]:
+    """Questions dont les documents ne contiennent PAS la réponse : le bon comportement est de refuser."""
+    content = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(content, list):
+        raise ValueError("Le fichier de questions hors sujet doit contenir une liste.")
+    if not content:
+        raise ValueError("Le fichier ne contient aucune question hors sujet.")
+
+    questions = []
+    for number, entry in enumerate(content, start=1):
+        text = entry.get("question") if isinstance(entry, dict) else None
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError(f"Entrée n° {number} : « question » doit être un texte non vide.")
+        questions.append(text)
+    return questions
