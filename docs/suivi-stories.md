@@ -66,7 +66,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] c. `OllamaChatModel` (`httpx`, température 0), testé sans réseau puis contre le vrai `llama3.2:3b`
 - [x] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
 - [x] e. Réglages dans `Settings` et `.env.example` (modèle, `num_ctx`, nombre d'extraits, seuil)
-- [ ] f. Commande `mini-rag-ask`
+- [x] f. Commande `mini-rag-ask`
 - [ ] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/answer-questions.json`), prédiction écrite avant, seuil calibré sur les chiffres
 - [ ] h. Glossaire, carte de l'écosystème, suivi
 

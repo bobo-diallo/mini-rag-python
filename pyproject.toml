@@ -14,6 +14,7 @@ dependencies = [
 # Après `pip install -e .`, la commande `mini-rag-chunks` lance la fonction `main` de mini_rag/cli.py.
 mini-rag-chunks = "mini_rag.cli:main"
 mini-rag-eval-retrieval = "mini_rag.evaluation.cli:main"
+mini-rag-ask = "mini_rag.generation.cli:main"
 
 [project.optional-dependencies]
 dev = [
