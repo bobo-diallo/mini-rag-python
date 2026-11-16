@@ -31,6 +31,7 @@ def build_answerer(
         base_url=settings.ollama_url,
         num_ctx=settings.num_ctx,
         max_output_tokens=settings.max_output_tokens,
+        timeout=settings.chat_timeout,
     )
     retriever = Retriever(embedder, InMemoryVectorStore(), settings.embedding_batch_size)
     retriever.index(chunks)

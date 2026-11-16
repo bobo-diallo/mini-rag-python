@@ -17,6 +17,7 @@ SETTING_VARIABLES = (
     "MAX_OUTPUT_TOKENS",
     "TOP_K",
     "MIN_SCORE",
+    "CHAT_TIMEOUT",
 )
 
 
@@ -43,6 +44,17 @@ def test_generation_defaults_are_the_starting_values_of_the_typescript_version()
     assert settings.max_output_tokens == 512
     assert settings.top_k == 4
     assert settings.min_score == 0.55
+    assert settings.chat_timeout == 300.0  # secondes ; un prompt neuf de 800 tokens met environ une minute sur un Mac Intel
+
+
+def test_the_chat_timeout_can_be_changed_and_must_be_positive(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("CHAT_TIMEOUT", "45.5")
+    assert Settings(_env_file=None).chat_timeout == 45.5
+
+    for invalid in ("0", "-5", "long"):
+        monkeypatch.setenv("CHAT_TIMEOUT", invalid)
+        with pytest.raises(ValidationError):
+            Settings(_env_file=None)
 
 
 def test_generation_settings_are_read_from_the_environment(monkeypatch: pytest.MonkeyPatch):
