@@ -13,9 +13,10 @@
 | Réglages depuis `.env` | `pydantic-settings` | `config.ts` + `.env` | 1 | une seule classe de configuration centralisée |
 | Lecture de PDF | `pypdf` | `pdf-parse` | 1 | extraire le texte page par page |
 | Découpage de texte | fonction maison (`ingestion/chunker.py`) ; `langchain-text-splitters` comme référence de test seulement | LangChain.js | 1 | maison d'abord (on comprend) ; la bibliothèque vérifie qu'on obtient les mêmes extraits |
-| Embeddings et modèle local | client `ollama` ou HTTP avec `httpx` | `@langchain/ollama` | 1 | `bge-m3` et un modèle ~3B comme dans l'autre projet |
+| Embeddings et modèle local | `httpx` vers l'API d'Ollama (`OllamaEmbedder`, fait en story 02) | `@langchain/ollama` | 1 | `bge-m3` ; modèle ~3B pour la génération (story 03) |
 | Base d'index | `sqlite3` (livré avec Python) + `sqlite-vec` | `better-sqlite3` + sqlite-vec | 1 | même choix que le projet TypeScript : un seul fichier |
 | Appels HTTP | `httpx` | `fetch` | 1-2 | synchrone ou asynchrone avec la même API |
+| Évaluation de la recherche | module maison `mini_rag/evaluation` (rang, hit@k, MRR, écart) | `eval-retrieval.ts` | 1 | mesurer avant/après chaque changement, avec la référence du hasard |
 | API Claude | SDK `anthropic` | `@anthropic-ai/sdk` | 2 | modèle `claude-haiku-5-5` par défaut |
 | Journalisation | module `logging` | `console` + fichier jsonl | 2 | jamais `print` en dehors du débogage |
 | Typage statique | `mypy` ou `pyright` | `tsc` | 2 | vérifier les annotations, optionnel mais recommandé |

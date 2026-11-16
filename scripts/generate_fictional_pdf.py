@@ -41,14 +41,20 @@ def paginate(paragraphs: list[str]) -> list[list[str]]:
     return pages[:PAGE_COUNT]
 
 
+def escape_pdf_text(text: str) -> str:
+    """Dans un PDF, le texte d'une ligne est entre parenthèses : celles du texte (et les \\) sont protégées."""
+    return text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
+
+
 def page_stream(lines: list[str]) -> bytes:
     """Les instructions PDF d'une page : police Helvetica 11, une ligne après l'autre."""
     instructions = ["BT", "/F1 11 Tf", "14 TL", "50 800 Td"]
     for line in lines:
-        instructions.append(f"({line}) Tj" if line else "")
+        instructions.append(f"({escape_pdf_text(line)}) Tj" if line else "")
         instructions.append("T*")  # passe à la ligne suivante
     instructions.append("ET")
-    return "\n".join(i for i in instructions if i).encode("latin-1")
+    # cp1252 = le jeu de caractères « WinAnsi » des PDF occidentaux : é, è, à, œ, € passent correctement.
+    return "\n".join(i for i in instructions if i).encode("cp1252")
 
 
 def write_pdf(pages: list[list[str]]) -> bytes:
@@ -57,7 +63,7 @@ def write_pdf(pages: list[list[str]]) -> bytes:
     # puis pour chaque page : un objet page et un objet contenu.
     objects: dict[int, bytes] = {
         1: b"<< /Type /Catalog /Pages 2 0 R >>",
-        3: b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        3: b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>",
     }
     page_numbers = []
     for i, lines in enumerate(pages):

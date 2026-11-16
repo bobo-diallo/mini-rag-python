@@ -24,8 +24,8 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 
 ## Story 01 — Lecture de PDF et découpage
 - **Branche :** `story/01-pdf-loading-and-chunking`
-- **PR :** à renseigner après la fusion
-- **Statut :** ✅ terminée (fusion lancée par `/push`)
+- **PR :** [#2](https://github.com/bobo-diallo/mini-rag-python/pull/2), fusionnée le 2026-11-14
+- **Statut :** ✅ terminée
 - **Test de réussite :** même nombre de chunks que la version TypeScript sur un même PDF fictif
 
 - [x] Conventions de structure d'un projet Python : `docs/python/05-structure-projet.md`
@@ -38,3 +38,20 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] **Test de réussite atteint** : sur `tests/fixtures/fictional-report.pdf` (6 pages, généré par `scripts/generate_fictional_pdf.py`), Python et TypeScript donnent les mêmes résultats : 29 chunks, taille moyenne 877, min 354, max 999
 - [x] Glossaire et carte de l'écosystème mis à jour
 - [x] Mise en conformité avec la règle « tout en anglais sauf les commentaires » (branche, fichiers, noms de tests et de variables)
+
+## Story 02 — Embeddings et recherche par le sens
+- **Branche :** `story/02-embeddings-and-search`
+- **PR :** — (sur `/push`)
+- **Statut :** ✅ terminée (fusion lancée par `/push`)
+- **Test de réussite :** rang des bonnes pages sur les questions d'évaluation (hit@3 et MRR mesurés avec `bge-m3`, corpus fictif)
+
+- [x] `cosine_similarity` (vecteurs proches, opposés, dimensions différentes, vecteur nul)
+- [x] `InMemoryVectorStore` : ajouter, chercher les `k` plus proches, trié du meilleur au moins bon
+- [x] Interface `Embedder` et traitement par lots (faux embedder pour les tests)
+- [x] `OllamaEmbedder` (`httpx`), testé sans réseau, plus un test d'intégration sauté si Ollama est absent
+- [x] Étape 4b : contrat `Embedder` obligatoire (`@abstractmethod`, déclaré par `OllamaEmbedder`) et configuration centralisée (`Settings`, `.env.example`), valeurs d'adresse et de modèle retirées des classes
+- [x] `Retriever` : indexer des chunks, chercher une question
+- [x] Corpus fictif thématique « Guide client Astrolabe » (10 pages, `eval/corpus/`) et 12 questions (`eval/retrieval-questions.json`), figés ; 10 pages plutôt que 6 pour que le hasard ne donne que 30 % de hit@3 au lieu de 50 %
+- [x] Commande de mesure `mini-rag-eval-retrieval` : rang de chaque question, hit@1, hit@3, MRR, référence du hasard. **Mesure 1 (`bge-m3`) : hit@3 = 100 %, MRR = 1,00** ; voir `docs/evaluations.md` (corpus trop facile pour départager des modèles)
+- [x] Glossaire (dimension, licence, hit@k, MRR, interface…), carte de l'écosystème, suivi
+

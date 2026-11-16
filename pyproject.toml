@@ -6,11 +6,14 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "pypdf>=7",  # lecture des PDF, page par page
+    "httpx>=0.28",  # appels HTTP vers Ollama
+    "pydantic-settings>=2",  # configuration lue depuis l'environnement et .env
 ]
 
 [project.scripts]
 # Après `pip install -e .`, la commande `mini-rag-chunks` lance la fonction `main` de mini_rag/cli.py.
 mini-rag-chunks = "mini_rag.cli:main"
+mini-rag-eval-retrieval = "mini_rag.evaluation.cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -23,5 +26,6 @@ dev = [
 testpaths = ["tests"]
 # Deux fichiers de test de même nom dans des dossiers différents ne se télescopent plus.
 addopts = ["--import-mode=importlib"]
+markers = ["ollama: test d'intégration qui exige un serveur Ollama avec le modèle bge-m3"]
 # Permet d'écrire « from mini_rag import ... » dans les tests sans installer le paquet.
 pythonpath = ["src"]

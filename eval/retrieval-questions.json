@@ -1,0 +1,14 @@
+[
+  {"question": "Quelles sont les différentes offres proposées et comment m'inscrire ?", "expected_page": 1},
+  {"question": "Quel jour de chaque mois mon compte en banque est-il débité ?", "expected_page": 2},
+  {"question": "Puis-je régler avec une carte prépayée plutôt qu'un prélèvement ?", "expected_page": 2},
+  {"question": "Où puis-je télécharger le récapitulatif de ce que j'ai payé ?", "expected_page": 3},
+  {"question": "Puis-je mettre mon service en pause pendant les vacances ?", "expected_page": 4},
+  {"question": "Combien de temps avant la fin dois-je prévenir pour partir ?", "expected_page": 5},
+  {"question": "Mon colis n'est jamais arrivé, comment être remboursé ?", "expected_page": 6},
+  {"question": "On m'a facturé un montant que je ne reconnais pas, que faire ?", "expected_page": 7},
+  {"question": "Comment protéger ma connexion avec un code envoyé sur mon téléphone ?", "expected_page": 8},
+  {"question": "Pendant combien de temps gardez-vous mes informations personnelles ?", "expected_page": 9},
+  {"question": "Comment effacer définitivement mes données ?", "expected_page": 9},
+  {"question": "À quelle heure puis-je joindre quelqu'un en cas de panne ?", "expected_page": 10}
+]

@@ -52,6 +52,8 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 
 **Vecteur** : simplement une liste de nombres, ici de 384 à 1024 nombres selon le modèle.
 
+**Dimension (d'un vecteur)** : le nombre de nombres qui composent le vecteur. `bge-m3` en produit 1024 pour chaque texte. Tous les vecteurs d'un même index doivent avoir la même dimension, sinon on ne peut pas les comparer nombre à nombre. Changer de modèle change souvent la dimension : il faut alors tout recalculer.
+
 **Similarité (cosinus)** : la mesure de proximité entre deux vecteurs. Plus elle est proche de 1, plus les sens sont proches.
 
 **Modèle d'embeddings** : un modèle spécialisé qui transforme du texte en vecteur (par exemple `bge-m3`). Il ne génère pas de texte, il ne fait que « situer » un texte.
@@ -82,6 +84,20 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 
 **Évaluation** : un jeu de questions dont on connaît les bonnes réponses, qu'on rejoue après chaque changement pour mesurer si on s'améliore ou non. C'est l'équivalent des tests automatisés pour un système d'IA.
 
+**Rang** : la position de la bonne réponse dans la liste classée par la recherche (1 = en tête). Un rang 3 veut dire que deux résultats l'ont devancée.
+
+**hit@k** : la part des questions dont la bonne réponse figure parmi les `k` premiers résultats. hit@1 = « en tête » ; hit@3 = « dans les trois premiers ».
+
+**MRR (*Mean Reciprocal Rank*)** : la moyenne de `1 / rang`. Bonne réponse en 1er = 1, en 2e = 0,5, en 4e = 0,25, absente = 0. Il récompense d'être très haut dans le classement, pas seulement dans les `k` premiers.
+
+**Hasard (*baseline*, référence)** : le score qu'obtiendrait un classement fait au hasard. Un résultat ne se juge que par rapport à lui : 50 % de hit@3 est mauvais si le hasard fait 60 %, excellent s'il fait 5 %. La commande d'évaluation l'affiche à chaque mesure.
+
+**Écart (marge)** : la différence de score entre la bonne réponse et la suivante. Un rang 1 avec 0,0006 d'écart est une victoire fragile ; avec 0,2 d'écart, elle est solide. Le rang seul cache cette différence.
+
+**Corpus trop facile (benchmark saturé)** : quand tous les modèles obtiennent 100 %, la mesure ne distingue plus rien. Il faut alors un corpus plus difficile, sans modifier l'ancien.
+
+**Test de mutation (à la main)** : on casse le code volontairement pour vérifier que les tests s'en aperçoivent. Un test qui ne peut jamais échouer ne prouve rien.
+
 ---
 
 ## 5. Hugging Face et l'outillage de modèles
@@ -89,6 +105,8 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 **Hugging Face (HF)** : le « GitHub des modèles d'IA ». Un site et un écosystème où des milliers de personnes et d'entreprises publient des modèles, des jeux de données et des démos.
 
 **Hub** : le catalogue en ligne de Hugging Face. Chaque modèle y a une page avec sa **fiche de modèle** (*model card*) : à quoi il sert, ses limites, sa **licence** (ce qu'on a le droit d'en faire, y compris commercialement), sa taille.
+
+**Licence** : ce que l'auteur d'un modèle autorise. MIT et Apache 2.0 sont très permissives (usage commercial permis). D'autres licences restreignent l'usage commercial ou exigent des conditions. À lire dans la fiche du modèle *avant* de s'en servir pour un client.
 
 **Space** : une mini-application de démonstration hébergée gratuitement sur Hugging Face. Pratique pour montrer un projet avec une vraie interface.
 
@@ -151,6 +169,30 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 **ROI (retour sur investissement)** : ce que la solution rapporte (temps gagné, erreurs évitées) comparé à ce qu'elle coûte à construire et à faire tourner.
 
 ---
+
+## 9. Python et pratiques de développement
+
+**Module et paquet** : un module est un fichier `.py` ; un paquet est un dossier de modules (avec un `__init__.py`). Python n'impose pas une classe par fichier : on regroupe ce qui va ensemble. Tout nom défini au niveau d'un fichier peut être importé ; un nom qui commence par `_` est privé *par convention*.
+
+**Décorateur (`@...`)** : une ligne au-dessus d'une fonction ou d'une classe qui lui ajoute un comportement. Exemples vus : `@dataclass` (fabrique le constructeur), `@property` (rend une méthode lisible comme un attribut), `@abstractmethod`, `@pytest.mark.ollama`.
+
+**Interface : `Protocol` et `@abstractmethod`** : un contrat qui décrit les méthodes qu'un objet doit avoir. Une classe peut le **déclarer** (`class OllamaEmbedder(Embedder)`) : si elle oublie une méthode marquée `@abstractmethod`, sa création échoue (`TypeError`), comme en Java. Un simple faux, lui, peut seulement avoir les bonnes méthodes : c'est le typage *structurel* (« duck typing »). Le reste du code dépend du contrat, jamais d'une classe précise.
+
+**Injection de dépendances** : une classe ou une fonction reçoit ce dont elle a besoin (un `Embedder`, un client HTTP) au lieu de le fabriquer elle-même. Ça permet de brancher un faux dans les tests, ou un autre modèle en production.
+
+**Faux (*fake*) et faux serveur (*mock*)** : un objet de test qui remplace un vrai composant, en plus rapide et prévisible. `httpx.MockTransport` remplace le réseau : le test s'exécute sans Ollama.
+
+**Fixture** : un objet préparé, que `pytest` fournit aux tests qui le nomment dans leurs paramètres. Les fixtures partagées vivent dans `conftest.py`.
+
+**Marqueur (`@pytest.mark.xxx`)** : une étiquette sur un test, pour le sélectionner (`pytest -m xxx`) ou l'exclure (`-m "not xxx"`). Elle se déclare dans `pyproject.toml`. Elle ne saute rien toute seule : le saut vient de `pytest.skip(...)`.
+
+**Fermeture (*closure*)** : une fonction définie à l'intérieur d'une autre peut lire et modifier les objets de la fonction englobante. C'est ainsi qu'un faux serveur de test « note » ce qu'il reçoit.
+
+**Variable d'environnement** : un réglage fourni au programme par son contexte (terminal, serveur), pas écrit dans le code. Permet une adresse différente sur ta machine, en test et en production sans modifier le code.
+
+**`.env` et `.env.example`** : `.env` contient tes réglages personnels et reste sur ta machine (ignoré par git, parce qu'il peut contenir des secrets). `.env.example` est le modèle publié, qui documente les variables existantes. `pydantic-settings` lit les variables d'environnement puis le `.env`, valide les types (un lot de taille 0 est refusé) et applique des valeurs par défaut.
+
+**Intégration continue (CI)** : voir la section 8.
 
 ## Entrées à ajouter au fil des stories
 Cette liste se complète à chaque story : chaque nouveau terme y entre le jour où on le rencontre.

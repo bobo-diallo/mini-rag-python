@@ -4,7 +4,7 @@ import dataclasses
 
 import pytest
 
-from mini_rag.domain.models import Chunk, PageText, Source
+from mini_rag.domain.models import Chunk, PageText, SearchResult, Source
 
 
 def test_a_chunk_has_a_stable_id_made_of_file_page_and_index():
@@ -32,3 +32,12 @@ def test_a_page_keeps_its_source_and_text():
 
     assert page.source.page == 3
     assert page.text == "Bonjour"
+
+
+def test_a_search_result_pairs_a_chunk_with_its_score():
+    chunk = Chunk(text="Un extrait.", source=Source(file="a.pdf", page=1), index=0)
+
+    result = SearchResult(chunk=chunk, score=0.87)
+
+    assert result.chunk is chunk
+    assert result.score == 0.87
