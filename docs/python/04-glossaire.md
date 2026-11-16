@@ -52,6 +52,8 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 
 **Vecteur** : simplement une liste de nombres, ici de 384 à 1024 nombres selon le modèle.
 
+**Dimension (d'un vecteur)** : le nombre de nombres qui composent le vecteur. `bge-m3` en produit 1024 pour chaque texte. Tous les vecteurs d'un même index doivent avoir la même dimension, sinon on ne peut pas les comparer nombre à nombre. Changer de modèle change souvent la dimension : il faut alors tout recalculer.
+
 **Similarité (cosinus)** : la mesure de proximité entre deux vecteurs. Plus elle est proche de 1, plus les sens sont proches.
 
 **Modèle d'embeddings** : un modèle spécialisé qui transforme du texte en vecteur (par exemple `bge-m3`). Il ne génère pas de texte, il ne fait que « situer » un texte.
@@ -103,6 +105,8 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 **Hugging Face (HF)** : le « GitHub des modèles d'IA ». Un site et un écosystème où des milliers de personnes et d'entreprises publient des modèles, des jeux de données et des démos.
 
 **Hub** : le catalogue en ligne de Hugging Face. Chaque modèle y a une page avec sa **fiche de modèle** (*model card*) : à quoi il sert, ses limites, sa **licence** (ce qu'on a le droit d'en faire, y compris commercialement), sa taille.
+
+**Licence** : ce que l'auteur d'un modèle autorise. MIT et Apache 2.0 sont très permissives (usage commercial permis). D'autres licences restreignent l'usage commercial ou exigent des conditions. À lire dans la fiche du modèle *avant* de s'en servir pour un client.
 
 **Space** : une mini-application de démonstration hébergée gratuitement sur Hugging Face. Pratique pour montrer un projet avec une vraie interface.
 

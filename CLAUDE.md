@@ -23,6 +23,7 @@ Portage en Python du projet `mini-rag-local` (TypeScript, dossier voisin), puis 
 - [ ] Phase 1 : portage du mini-RAG (stories 01 à 06, détail dans `docs/feuille-de-route.md`)
 - [x] Story 00b : feuille de route étendue + glossaire (PR #1)
 - [x] Story 01 : lecture de PDF et découpage, parité avec la version TypeScript (29 chunks sur un PDF fictif)
+- [x] Story 02 : embeddings `bge-m3` et recherche par le sens (hit@3 = 100 %, MRR = 1,00 sur un corpus fictif trop facile)
 - [ ] Phase 2b : Hugging Face et modèles ouverts
 - [ ] Phase 2 : LLM en production
 - [ ] Phase 3 : RAG évalué

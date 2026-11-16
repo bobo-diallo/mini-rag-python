@@ -42,7 +42,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 ## Story 02 — Embeddings et recherche par le sens
 - **Branche :** `story/02-embeddings-and-search`
 - **PR :** — (sur `/push`)
-- **Statut :** 🔄 en cours (plan validé)
+- **Statut :** ✅ terminée (fusion lancée par `/push`)
 - **Test de réussite :** rang des bonnes pages sur les questions d'évaluation (hit@3 et MRR mesurés avec `bge-m3`, corpus fictif)
 
 - [x] `cosine_similarity` (vecteurs proches, opposés, dimensions différentes, vecteur nul)
@@ -53,5 +53,5 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] `Retriever` : indexer des chunks, chercher une question
 - [x] Corpus fictif thématique « Guide client Astrolabe » (10 pages, `eval/corpus/`) et 12 questions (`eval/retrieval-questions.json`), figés ; 10 pages plutôt que 6 pour que le hasard ne donne que 30 % de hit@3 au lieu de 50 %
 - [x] Commande de mesure `mini-rag-eval-retrieval` : rang de chaque question, hit@1, hit@3, MRR, référence du hasard. **Mesure 1 (`bge-m3`) : hit@3 = 100 %, MRR = 1,00** ; voir `docs/evaluations.md` (corpus trop facile pour départager des modèles)
-- [ ] Glossaire (dimension, licence, hit@k, MRR, interface), carte de l'écosystème, suivi
+- [x] Glossaire (dimension, licence, hit@k, MRR, interface…), carte de l'écosystème, suivi
 
