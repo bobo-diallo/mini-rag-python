@@ -45,3 +45,62 @@ Commande : `mini-rag-eval-retrieval` (corpus `eval/corpus/`, questions `eval/ret
 - 12 questions, un seul corpus fictif, de petites pages bien séparées : ce n'est pas un document réel avec des pages longues, du bruit, des tableaux.
 
 **Suite** : pour la phase 2b (comparer des modèles), il faudra un corpus **plus difficile** (plus de pages, pages plus longues donc plusieurs chunks, sujets plus proches), créé **à côté** de celui-ci, sans modifier celui-ci. On suivra aussi l'écart de score, pas seulement le rang.
+
+## Mesure 2 — réponses avec citations, `llama3.2:3b` (story 03, étape g)
+
+Commande : `mini-rag-eval-answers --runs 1 --show-answers`, lancée sous `caffeinate` (pas de mise en veille).
+
+**Conditions** : recherche `bge-m3`, génération `llama3.2:3b` via Ollama 0.40.16 sur un Mac Intel i7 (100 % processeur, sans carte graphique), température 0, `k = 4`, seuil `0,55`, fenêtre 4096, réponse limitée à 512 tokens. Corpus et 12 questions de la mesure 1, plus 4 questions hors sujet écrites **avant** toute mesure et figées (une très éloignée, trois proches du sujet). **Un seul passage** : la génération n'est pas strictement reproductible, ce résultat est donc un échantillon.
+
+**Prédiction écrite avant la mesure** : « le modèle citera correctement dans moins de la moitié des cas ; les 4 questions hors sujet seront refusées sans appel au modèle. »
+
+**Résultats**
+
+| # | Page attendue | Répondu | Citation vérifiée | Bonne page citée | Durée | Ce que le modèle a fait |
+|---|---|---|---|---|---|---|
+| 1 | 1 | non | – | – | 83,4 s | « Je ne sais pas » (premier appel : chargement du modèle) |
+| 2 | 2 | oui | non | non | 24,4 s | « prélevé le cinq de chaque mois » : juste, sans citation |
+| 3 | 2 | non | – | – | 24,8 s | « Je ne sais pas » |
+| 4 | 3 | non | – | – | 21,3 s | « Je ne sais pas » |
+| 5 | 4 | oui | oui | oui | 36,2 s | pause de 1 à 3 mois, cite [1] |
+| 6 | 5 | oui | oui | oui | 21,3 s | préavis de 30 jours, cite [1] |
+| 7 | 6 | oui | oui | oui | 38,2 s | remboursement sous 10 jours, cite [1] |
+| 8 | 7 | oui | oui | oui | 39,6 s | écrire au service litiges, cite [1] |
+| 9 | 8 | oui | non | non | 23,5 s | double vérification : juste, sans citation |
+| 10 | 9 | oui | oui | oui | 17,3 s | conservation 3 ans après la fin, cite [1] |
+| 11 | 9 | non | – | – | 13,2 s | « Je ne sais pas » |
+| 12 | 10 | non | – | – | 15,3 s | « Je ne sais pas » |
+| 13 | hors sujet | refus | – | – | 0,5 s | refus par le seuil, sans appel au modèle |
+| 14 | hors sujet | refus | – | – | 0,2 s | refus par le seuil, sans appel au modèle |
+| 15 | hors sujet | refus | – | – | 11,9 s | **a franchi le seuil** ; le modèle a refusé de lui-même |
+| 16 | hors sujet | refus | – | – | 0,3 s | refus par le seuil, sans appel au modèle |
+
+| Métrique | Résultat |
+|---|---|
+| Réponses données (sur 12 questions du guide) | 7/12 = 58 % |
+| Refus à tort (la réponse était dans les documents) | **5/12 = 42 %** |
+| Citations vérifiées (parmi les 7 réponses) | 5/7 = 71 % |
+| Numéros de citation inventés | 0/7 |
+| Bonne page citée (sur 12) | 5/12 = 42 % |
+| Refus justifiés (sur 4 hors sujet) | 4/4 = 100 % |
+| dont refusés par le seuil seul | 3/4 |
+| Réponses inventées hors sujet | 0/4 |
+| Tokens / durée totale | 10 083 / 371 s (environ 6,5 minutes) |
+
+**Prédiction contre résultat**
+- « Moins de la moitié des cas, citation correcte » : exact en valeur (5/12 = 42 %), mais **pour une autre raison** que celle que je supposais. Le problème principal n'est pas l'oubli de citation (2 réponses sur 7), c'est le **refus à tort** (5 questions sur 12).
+- « Les 4 hors sujet refusées sans appel au modèle » : **inexact**. 4 sur 4 sont refusées, mais 3 seulement par le seuil. La question 15 (application mobile) a franchi le seuil et n'a été arrêtée que par le modèle.
+
+**Ce que ça dit**
+- **Le critère de la story est atteint** : aucune citation inventée (0/7), aucune réponse inventée hors sujet (0/4). Rien n'est affirmé sans source ou sans que le code le sache.
+- **Les 7 réponses données sont conformes au guide** à la lecture, mais seulement 5 sont sourcées.
+- Les 5 refus à tort ont tous duré plus de 13 s : le modèle a été appelé, ce n'est donc pas le seuil qui a refusé. D'après la mesure 1, la bonne page était pourtant **en tête** de la recherche pour ces questions. **C'est `llama3.2:3b` qui refuse alors que la réponse figure dans les extraits.**
+- Le seuil seul ne suffit pas : sur les 4 hors sujet, 1 l'a franchi. C'est le modèle qui a évité une réponse inventée, ce qui n'est pas garanti.
+
+**Ce que ça ne dit pas**
+- **Un seul passage** : on ne connaît pas la variabilité. Un autre passage pourrait changer plusieurs lignes.
+- **Toutes les citations valent `[1]`**, c'est-à-dire l'extrait classé premier par la recherche, qui était la bonne page dans 12 cas sur 12. On ne sait donc pas si le modèle **lit** les extraits pour citer, ou s'il écrit `[1]` par habitude. Pour le savoir, il faudrait présenter les extraits dans un ordre où la bonne page n'est pas en tête.
+- Les durées sont celles d'un Mac Intel sans carte graphique ; la première question (83 s) inclut le chargement du modèle.
+- Le jugement « conforme au guide » est le mien, par lecture : il n'y a pas de réponse de référence automatisée.
+
+**Suite proposée** (un changement à la fois) : (1) répéter ce passage 3 fois pour mesurer la variabilité ; (2) essayer la variante de prompt avec un exemple de réponse citée, que la version TypeScript avait prévue pour les petits modèles, puis comparer sur 3 passages ; (3) ensuite seulement, calibrer le seuil.

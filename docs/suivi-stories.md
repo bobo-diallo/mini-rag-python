@@ -67,6 +67,6 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
 - [x] e. Réglages dans `Settings` et `.env.example` (modèle, `num_ctx`, nombre d'extraits, seuil)
 - [x] f. Commande `mini-rag-ask`
-- [ ] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/answer-questions.json`), prédiction écrite avant, seuil calibré sur les chiffres
+- [ ] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/out-of-scope-questions.json`), prédiction écrite avant. **Mesure 2 faite (1 passage)** : 0 citation inventée, 0 réponse inventée hors sujet, mais 5/12 refus à tort par le modèle ; voir `docs/evaluations.md`. Reste : 3 passages, variante de prompt avec exemple, calibration du seuil
 - [ ] h. Glossaire, carte de l'écosystème, suivi
 
