@@ -52,6 +52,6 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Étape 4b : contrat `Embedder` obligatoire (`@abstractmethod`, déclaré par `OllamaEmbedder`) et configuration centralisée (`Settings`, `.env.example`), valeurs d'adresse et de modèle retirées des classes
 - [x] `Retriever` : indexer des chunks, chercher une question
 - [x] Corpus fictif thématique « Guide client Astrolabe » (10 pages, `eval/corpus/`) et 12 questions (`eval/retrieval-questions.json`), figés ; 10 pages plutôt que 6 pour que le hasard ne donne que 30 % de hit@3 au lieu de 50 %
-- [ ] Commande de mesure : rang de chaque question, hit@3, MRR
+- [x] Commande de mesure `mini-rag-eval-retrieval` : rang de chaque question, hit@1, hit@3, MRR, référence du hasard. **Mesure 1 (`bge-m3`) : hit@3 = 100 %, MRR = 1,00** ; voir `docs/evaluations.md` (corpus trop facile pour départager des modèles)
 - [ ] Glossaire (dimension, licence, hit@k, MRR, interface), carte de l'écosystème, suivi
 

@@ -82,6 +82,20 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 
 **Évaluation** : un jeu de questions dont on connaît les bonnes réponses, qu'on rejoue après chaque changement pour mesurer si on s'améliore ou non. C'est l'équivalent des tests automatisés pour un système d'IA.
 
+**Rang** : la position de la bonne réponse dans la liste classée par la recherche (1 = en tête). Un rang 3 veut dire que deux résultats l'ont devancée.
+
+**hit@k** : la part des questions dont la bonne réponse figure parmi les `k` premiers résultats. hit@1 = « en tête » ; hit@3 = « dans les trois premiers ».
+
+**MRR (*Mean Reciprocal Rank*)** : la moyenne de `1 / rang`. Bonne réponse en 1er = 1, en 2e = 0,5, en 4e = 0,25, absente = 0. Il récompense d'être très haut dans le classement, pas seulement dans les `k` premiers.
+
+**Hasard (*baseline*, référence)** : le score qu'obtiendrait un classement fait au hasard. Un résultat ne se juge que par rapport à lui : 50 % de hit@3 est mauvais si le hasard fait 60 %, excellent s'il fait 5 %. La commande d'évaluation l'affiche à chaque mesure.
+
+**Écart (marge)** : la différence de score entre la bonne réponse et la suivante. Un rang 1 avec 0,0006 d'écart est une victoire fragile ; avec 0,2 d'écart, elle est solide. Le rang seul cache cette différence.
+
+**Corpus trop facile (benchmark saturé)** : quand tous les modèles obtiennent 100 %, la mesure ne distingue plus rien. Il faut alors un corpus plus difficile, sans modifier l'ancien.
+
+**Test de mutation (à la main)** : on casse le code volontairement pour vérifier que les tests s'en aperçoivent. Un test qui ne peut jamais échouer ne prouve rien.
+
 ---
 
 ## 5. Hugging Face et l'outillage de modèles
