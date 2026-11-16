@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from mini_rag.config import Settings
+from mini_rag.evaluation.corpus import CorpusError, find_single_pdf
 from mini_rag.evaluation.metrics import hit_rate, mean_reciprocal_rank, random_hit_rate, random_mrr
 from mini_rag.evaluation.questions import load_questions
 from mini_rag.evaluation.retrieval_eval import QuestionOutcome, evaluate_retrieval
@@ -32,9 +33,10 @@ def main(
         return _fail(f"k doit valoir au moins 1 (reçu {args.k}).")
 
     settings = settings or Settings()
-    corpus_pdf = _find_the_corpus_pdf(Path(args.corpus))
-    if isinstance(corpus_pdf, str):  # une chaîne = un message d'erreur
-        return _fail(corpus_pdf)
+    try:
+        corpus_pdf = find_single_pdf(Path(args.corpus))
+    except CorpusError as error:
+        return _fail(str(error))
 
     try:
         questions = load_questions(args.questions)
@@ -60,18 +62,6 @@ def main(
     _print_table(outcomes)
     _print_summary(outcomes, page_count)
     return 0
-
-
-def _find_the_corpus_pdf(folder: Path) -> Path | str:
-    """Le PDF du corpus, ou un message d'erreur. Un seul PDF : sinon « page 3 » ne dirait pas de quel fichier."""
-    if not folder.is_dir():
-        return f"Dossier de corpus introuvable : {folder}"
-    pdfs = sorted(p for p in folder.iterdir() if p.suffix.lower() == ".pdf")
-    if not pdfs:
-        return f"Aucun PDF dans {folder}."
-    if len(pdfs) > 1:
-        return f"Le corpus doit contenir un seul PDF (les numéros de page seraient ambigus), il y en a {len(pdfs)} dans {folder}."
-    return pdfs[0]
 
 
 def _print_table(outcomes: Sequence[QuestionOutcome]) -> None:

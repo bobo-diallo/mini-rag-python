@@ -15,6 +15,7 @@ dependencies = [
 mini-rag-chunks = "mini_rag.cli:main"
 mini-rag-eval-retrieval = "mini_rag.evaluation.cli:main"
 mini-rag-ask = "mini_rag.generation.cli:main"
+mini-rag-eval-answers = "mini_rag.evaluation.answers_cli:main"
 
 [project.optional-dependencies]
 dev = [
