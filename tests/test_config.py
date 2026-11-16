@@ -8,7 +8,16 @@ from pydantic import ValidationError
 from mini_rag.config import Settings
 
 REPOSITORY_ROOT = Path(__file__).parent.parent
-SETTING_VARIABLES = ("OLLAMA_URL", "EMBEDDING_MODEL", "EMBEDDING_BATCH_SIZE")
+SETTING_VARIABLES = (
+    "OLLAMA_URL",
+    "EMBEDDING_MODEL",
+    "EMBEDDING_BATCH_SIZE",
+    "CHAT_MODEL",
+    "NUM_CTX",
+    "MAX_OUTPUT_TOKENS",
+    "TOP_K",
+    "MIN_SCORE",
+)
 
 
 @pytest.fixture(autouse=True)
@@ -24,6 +33,29 @@ def test_defaults_work_without_any_configuration():
     assert settings.ollama_url == "http://localhost:11434"
     assert settings.embedding_model == "bge-m3"
     assert settings.embedding_batch_size == 16
+
+
+def test_generation_defaults_are_the_starting_values_of_the_typescript_version():
+    settings = Settings(_env_file=None)
+
+    assert settings.chat_model == "llama3.2:3b"
+    assert settings.num_ctx == 4096
+    assert settings.max_output_tokens == 512
+    assert settings.top_k == 4
+    assert settings.min_score == 0.55
+
+
+def test_generation_settings_are_read_from_the_environment(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("CHAT_MODEL", "qwen3:4b")
+    monkeypatch.setenv("NUM_CTX", "8192")
+    monkeypatch.setenv("MAX_OUTPUT_TOKENS", "256")
+    monkeypatch.setenv("TOP_K", "6")
+    monkeypatch.setenv("MIN_SCORE", "0.7")
+
+    settings = Settings(_env_file=None)
+
+    assert (settings.chat_model, settings.num_ctx, settings.max_output_tokens) == ("qwen3:4b", 8192, 256)
+    assert (settings.top_k, settings.min_score) == (6, 0.7)  # « 6 » devient un entier, « 0.7 » un décimal
 
 
 def test_environment_variables_override_the_defaults(monkeypatch: pytest.MonkeyPatch):
@@ -68,6 +100,32 @@ def test_an_invalid_batch_size_is_rejected(monkeypatch: pytest.MonkeyPatch, valu
     monkeypatch.setenv("EMBEDDING_BATCH_SIZE", value)
 
     with pytest.raises(ValidationError):
+        Settings(_env_file=None)
+
+
+@pytest.mark.parametrize(
+    "name, value",
+    [
+        ("NUM_CTX", "0"),
+        ("MAX_OUTPUT_TOKENS", "0"),
+        ("TOP_K", "0"),
+        ("TOP_K", "beaucoup"),
+        ("MIN_SCORE", "1.5"),  # un cosinus ne dépasse jamais 1
+        ("MIN_SCORE", "-2"),
+    ],
+)
+def test_invalid_generation_values_are_rejected(monkeypatch: pytest.MonkeyPatch, name: str, value: str):
+    monkeypatch.setenv(name, value)
+
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None)
+
+
+def test_the_window_must_leave_room_for_the_prompt_beyond_the_reserved_answer(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("NUM_CTX", "500")
+    monkeypatch.setenv("MAX_OUTPUT_TOKENS", "512")  # la réponse réservée dépasse la fenêtre entière
+
+    with pytest.raises(ValidationError, match="fenêtre"):
         Settings(_env_file=None)
 
 
