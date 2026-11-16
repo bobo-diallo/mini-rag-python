@@ -64,7 +64,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] a. `resolve_citations` : relier les « [n] » de la réponse aux extraits réels, signaler les numéros inventés
 - [x] b. `build_prompt`, `NO_ANSWER`, estimation des tokens
 - [x] c. `OllamaChatModel` (`httpx`, température 0), testé sans réseau puis contre le vrai `llama3.2:3b`
-- [ ] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
+- [x] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
 - [ ] e. Réglages dans `Settings` et `.env.example` (modèle, `num_ctx`, nombre d'extraits, seuil)
 - [ ] f. Commande `mini-rag-ask`
 - [ ] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/answer-questions.json`), prédiction écrite avant, seuil calibré sur les chiffres
