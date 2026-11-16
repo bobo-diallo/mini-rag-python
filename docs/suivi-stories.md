@@ -62,7 +62,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - **Test de réussite :** citations toutes présentes dans les extraits fournis, et « je ne sais pas » quand les documents ne contiennent pas la réponse (mesuré avec `llama3.2:3b`)
 
 - [x] a. `resolve_citations` : relier les « [n] » de la réponse aux extraits réels, signaler les numéros inventés
-- [ ] b. `build_prompt`, `NO_ANSWER`, estimation des tokens
+- [x] b. `build_prompt`, `NO_ANSWER`, estimation des tokens
 - [ ] c. `OllamaChatModel` (`httpx`, température 0), testé sans réseau puis contre le vrai `llama3.2:3b`
 - [ ] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
 - [ ] e. Réglages dans `Settings` et `.env.example` (modèle, `num_ctx`, nombre d'extraits, seuil)
