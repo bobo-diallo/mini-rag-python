@@ -41,8 +41,8 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 
 ## Story 02 — Embeddings et recherche par le sens
 - **Branche :** `story/02-embeddings-and-search`
-- **PR :** — (sur `/push`)
-- **Statut :** ✅ terminée (fusion lancée par `/push`)
+- **PR :** [#3](https://github.com/bobo-diallo/mini-rag-python/pull/3), fusionnée le 2026-11-16
+- **Statut :** ✅ terminée
 - **Test de réussite :** rang des bonnes pages sur les questions d'évaluation (hit@3 et MRR mesurés avec `bge-m3`, corpus fictif)
 
 - [x] `cosine_similarity` (vecteurs proches, opposés, dimensions différentes, vecteur nul)
@@ -54,4 +54,19 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] Corpus fictif thématique « Guide client Astrolabe » (10 pages, `eval/corpus/`) et 12 questions (`eval/retrieval-questions.json`), figés ; 10 pages plutôt que 6 pour que le hasard ne donne que 30 % de hit@3 au lieu de 50 %
 - [x] Commande de mesure `mini-rag-eval-retrieval` : rang de chaque question, hit@1, hit@3, MRR, référence du hasard. **Mesure 1 (`bge-m3`) : hit@3 = 100 %, MRR = 1,00** ; voir `docs/evaluations.md` (corpus trop facile pour départager des modèles)
 - [x] Glossaire (dimension, licence, hit@k, MRR, interface…), carte de l'écosystème, suivi
+
+## Story 03 — Réponse avec citations vérifiées
+- **Branche :** `story/03-answers-with-citations`
+- **PR :** — (sur `/push`)
+- **Statut :** 🔄 en cours (plan validé)
+- **Test de réussite :** citations toutes présentes dans les extraits fournis, et « je ne sais pas » quand les documents ne contiennent pas la réponse (mesuré avec `llama3.2:3b`)
+
+- [x] a. `resolve_citations` : relier les « [n] » de la réponse aux extraits réels, signaler les numéros inventés
+- [ ] b. `build_prompt`, `NO_ANSWER`, estimation des tokens
+- [ ] c. `OllamaChatModel` (`httpx`, température 0), testé sans réseau puis contre le vrai `llama3.2:3b`
+- [ ] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
+- [ ] e. Réglages dans `Settings` et `.env.example` (modèle, `num_ctx`, nombre d'extraits, seuil)
+- [ ] f. Commande `mini-rag-ask`
+- [ ] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/answer-questions.json`), prédiction écrite avant, seuil calibré sur les chiffres
+- [ ] h. Glossaire, carte de l'écosystème, suivi
 
