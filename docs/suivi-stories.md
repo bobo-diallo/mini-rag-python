@@ -51,7 +51,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] `OllamaEmbedder` (`httpx`), testé sans réseau, plus un test d'intégration sauté si Ollama est absent
 - [x] Étape 4b : contrat `Embedder` obligatoire (`@abstractmethod`, déclaré par `OllamaEmbedder`) et configuration centralisée (`Settings`, `.env.example`), valeurs d'adresse et de modèle retirées des classes
 - [x] `Retriever` : indexer des chunks, chercher une question
-- [ ] Corpus fictif thématique (PDF de 6 pages) et 10 questions formulées sans les mots de la page
+- [x] Corpus fictif thématique « Guide client Astrolabe » (10 pages, `eval/corpus/`) et 12 questions (`eval/retrieval-questions.json`), figés ; 10 pages plutôt que 6 pour que le hasard ne donne que 30 % de hit@3 au lieu de 50 %
 - [ ] Commande de mesure : rang de chaque question, hit@3, MRR
 - [ ] Glossaire (dimension, licence, hit@k, MRR, interface), carte de l'écosystème, suivi
 
