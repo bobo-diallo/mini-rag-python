@@ -18,6 +18,13 @@ from mini_rag.retrieval.retriever import Retriever
 from mini_rag.retrieval.vector_store import InMemoryVectorStore
 
 
+def describe_chat_model(settings: Settings) -> str:
+    """Le nom du modèle qui répond et où il tourne, pour que les rapports disent ce qu'ils ont vraiment mesuré."""
+    if settings.chat_provider == "anthropic":
+        return f"{settings.anthropic_model} (Anthropic, à distance)"
+    return f"{settings.chat_model} (Ollama, local)"
+
+
 def build_chat_model(settings: Settings) -> ChatModel:
     """Le modèle qui rédige les réponses, choisi par `CHAT_PROVIDER` : Ollama (local) ou Claude (à distance)."""
     if settings.chat_provider == "anthropic":

@@ -5,7 +5,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from mini_rag.composition import build_answerer
+from mini_rag.composition import build_answerer, describe_chat_model
 from mini_rag.config import ConfigurationError, Settings
 from mini_rag.evaluation.answer_eval import AnswerSample, evaluate_answers, summarize
 from mini_rag.evaluation.corpus import CorpusError, find_single_pdf
@@ -52,7 +52,7 @@ def main(
         return _fail(str(error))
 
     embedding_label = type(embedder).__name__ if embedder else settings.embedding_model
-    chat_label = type(chat_model).__name__ if chat_model else settings.chat_model
+    chat_label = type(chat_model).__name__ if chat_model else describe_chat_model(settings)
     print(
         f"Corpus : {corpus_pdf.name} — {len(chunks)} chunks | recherche : {embedding_label} | "
         f"génération : {chat_label} | k = {settings.top_k} | seuil = {settings.min_score:.2f}"

@@ -5,7 +5,7 @@ from collections.abc import Sequence
 
 import pytest
 
-from mini_rag.composition import build_answerer, build_chat_model
+from mini_rag.composition import build_answerer, build_chat_model, describe_chat_model
 from mini_rag.config import ConfigurationError, Settings
 from mini_rag.domain.models import Chunk, Source
 from mini_rag.generation.anthropic_chat_model import AnthropicChatModel
@@ -101,3 +101,11 @@ def test_a_missing_key_fails_before_any_embedding_work_is_done():
         build_answerer(CHUNKS, settings, embedder=RecordingEmbedder())
 
     assert calls == []  # on n'a calculé aucun vecteur pour rien
+
+
+def test_the_report_label_names_the_model_that_really_answers():
+    local = Settings(_env_file=None)
+    remote = Settings(_env_file=None, chat_provider="anthropic", anthropic_api_key="sk-ant-test")
+
+    assert describe_chat_model(local) == "llama3.2:3b (Ollama, local)"
+    assert describe_chat_model(remote) == "claude-haiku-5-5 (Anthropic, à distance)"
