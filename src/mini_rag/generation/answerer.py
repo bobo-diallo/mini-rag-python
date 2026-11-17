@@ -32,6 +32,9 @@ class AnswerOptions:
     min_score: float  # score minimal du meilleur extrait ; en dessous, on refuse sans appeler le modèle
     context_limit: int  # fenêtre de contexte demandée à Ollama (`num_ctx`), en tokens
     max_output_tokens: int  # place réservée à la réponse dans cette fenêtre, en tokens
+    # Expérience : présenter le MEILLEUR extrait en dernier (numéro le plus élevé). Sert à vérifier que le modèle
+    # cite d'après le contenu et non par habitude « [1] ». Faux par défaut, donc sans effet sur l'usage normal.
+    best_last: bool = False
 
     def __post_init__(self) -> None:
         if self.k < 1:
@@ -71,14 +74,15 @@ class Answerer:
         if not self._is_answerable(retrieved):
             return self._unanswered(retrieved)
 
-        used = self._fit_in_context(question, retrieved)
-        completion = self._chat_model.generate(build_prompt(question, [r.chunk for r in used]))
+        used = self._fit_in_context(question, retrieved)  # d'abord on retire les pires, si ça déborde...
+        shown = tuple(reversed(used)) if self._options.best_last else tuple(used)  # ...puis on choisit l'ordre
+        completion = self._chat_model.generate(build_prompt(question, [r.chunk for r in shown]))
         text = completion.text.strip()
 
         if REFUSAL_START.match(text):
             return self._unanswered(retrieved, used_extracts=len(used), tokens=completion.tokens)
 
-        resolved = resolve_citations(text, used)  # on ne vérifie que les extraits réellement envoyés
+        resolved = resolve_citations(text, shown)  # les numéros suivent l'ordre vu par le modèle
         return Reply(
             text=text,
             answered=True,

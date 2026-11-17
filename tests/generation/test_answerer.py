@@ -247,3 +247,44 @@ def test_a_model_failure_is_not_hidden():
 def test_invalid_options_are_rejected_at_creation(changes):
     with pytest.raises(ValueError):
         options(**changes)
+
+
+# --- Ordre de présentation : le meilleur extrait en dernier ------------------------------------
+# Sert à vérifier que le modèle cite d'après le CONTENU, pas par habitude le premier numéro.
+
+
+def test_best_last_presents_the_extracts_in_reverse_ranking_order():
+    found = four_results()
+    model = FakeChatModel()
+
+    Answerer(FakeSearcher(found), model, options(best_last=True)).answer(QUESTION)
+
+    assert model.prompts == [build_prompt(QUESTION, [r.chunk for r in reversed(found)])]
+
+
+def test_best_last_citations_follow_the_numbering_the_model_saw():
+    found = four_results()
+
+    default_order = Answerer(FakeSearcher(found), FakeChatModel("Selon [4]."), options()).answer(QUESTION)
+    best_last = Answerer(FakeSearcher(found), FakeChatModel("Selon [4]."), options(best_last=True)).answer(QUESTION)
+
+    assert default_order.citations == (found[3],)  # [4] est le moins bien classé
+    assert best_last.citations == (found[0],)  # [4] est maintenant le mieux classé
+
+
+def test_best_last_still_drops_the_worst_ranked_extracts_first_when_the_prompt_overflows():
+    found = long_results(4)
+    max_output = 100
+    two_fit = estimate_tokens(build_prompt(QUESTION, [r.chunk for r in found[:2]]))
+    model = FakeChatModel("Oui [2].")
+
+    reply = Answerer(
+        FakeSearcher(found),
+        model,
+        options(context_limit=two_fit + max_output, max_output_tokens=max_output, best_last=True),
+    ).answer(QUESTION)
+
+    # On retire d'abord les pires (3e et 4e), PUIS on renverse : il reste [2e, 1er], le meilleur en dernier.
+    assert model.prompts == [build_prompt(QUESTION, [found[1].chunk, found[0].chunk])]
+    assert reply.citations == (found[0],)
+    assert reply.used_extracts == 2

@@ -109,3 +109,34 @@ def test_the_report_label_names_the_model_that_really_answers():
 
     assert describe_chat_model(local) == "llama3.2:3b (Ollama, local)"
     assert describe_chat_model(remote) == "claude-haiku-5-5 (Anthropic, à distance)"
+
+
+# --- Ordre de présentation des extraits ---------------------------------------------------------
+
+
+class RecordingChatModel(ChatModel):
+    def __init__(self) -> None:
+        self.prompts: list[str] = []
+
+    def generate(self, prompt: str) -> Completion:
+        self.prompts.append(prompt)
+        return Completion(text="Voilà [1].", tokens=None)
+
+
+def test_best_last_reaches_the_answerer_through_the_assembly():
+    model = RecordingChatModel()
+
+    build_answerer(
+        CHUNKS, Settings(_env_file=None), embedder=WordEmbedder(), chat_model=model, best_last=True
+    ).answer("alpha ?")
+
+    # « alpha » est le mieux classé : en mode « meilleur en dernier », il porte le dernier numéro.
+    assert "[3] alpha" in model.prompts[0]
+
+
+def test_the_default_presents_the_best_extract_first():
+    model = RecordingChatModel()
+
+    build_answerer(CHUNKS, Settings(_env_file=None), embedder=WordEmbedder(), chat_model=model).answer("alpha ?")
+
+    assert "[1] alpha" in model.prompts[0]

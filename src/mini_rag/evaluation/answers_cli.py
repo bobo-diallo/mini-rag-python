@@ -46,7 +46,9 @@ def main(
 
     chunks = chunk_pages(PdfLoader().load(corpus_pdf))
     try:
-        answerer = build_answerer(chunks, settings, embedder=embedder, chat_model=chat_model)
+        answerer = build_answerer(
+            chunks, settings, embedder=embedder, chat_model=chat_model, best_last=args.best_last
+        )
         samples = evaluate_answers(answerer, questions, out_of_scope, args.runs)
     except (ConfigurationError, EmbeddingError, GenerationError) as error:
         return _fail(str(error))
@@ -57,6 +59,8 @@ def main(
         f"Corpus : {corpus_pdf.name} — {len(chunks)} chunks | recherche : {embedding_label} | "
         f"génération : {chat_label} | k = {settings.top_k} | seuil = {settings.min_score:.2f}"
     )
+    order = "dernier" if args.best_last else "premier"
+    print(f"Ordre des extraits dans le prompt : meilleur extrait en {order}")
     passes = f"{args.runs} passage{'s' if args.runs > 1 else ''} par question"
     print(f"Questions du guide : {len(questions)} | hors sujet : {len(out_of_scope)} | {passes}\n")
     _print_table(samples, args.runs)
@@ -127,6 +131,11 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--questions", default=DEFAULT_QUESTIONS, help="questions dont la réponse est dans le guide")
     parser.add_argument("--out-of-scope", default=DEFAULT_OUT_OF_SCOPE, help="questions dont la réponse n'y est pas")
     parser.add_argument("--runs", type=int, default=1, help="passages par question (la génération varie d'un passage à l'autre)")
+    parser.add_argument(
+        "--best-last",
+        action="store_true",
+        help="présente le meilleur extrait en dernier : vérifie que le modèle cite d'après le contenu, pas par habitude",
+    )
     parser.add_argument("--show-answers", action="store_true", help="affiche le texte de chaque réponse du modèle")
     return parser.parse_args(argv)
 
