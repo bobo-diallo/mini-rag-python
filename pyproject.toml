@@ -27,7 +27,9 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # Deux fichiers de test de même nom dans des dossiers différents ne se télescopent plus.
-addopts = ["--import-mode=importlib"]
+# `-m "not ollama"` : par défaut, `pytest` n'appelle jamais le vrai Ollama (lent, lourd pour la machine).
+# Pour lancer les tests d'intégration : `pytest -m ollama`.
+addopts = ["--import-mode=importlib", "-m", "not ollama"]
 markers = ["ollama: test d'intégration qui exige un serveur Ollama avec le modèle bge-m3"]
 # Permet d'écrire « from mini_rag import ... » dans les tests sans installer le paquet.
 pythonpath = ["src"]
