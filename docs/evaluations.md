@@ -139,3 +139,36 @@ Commande : `mini-rag-eval-answers --runs 3 --show-answers` avec `CHAT_PROVIDER=a
 - Les embeddings sont encore calculés **en local** ; la chaîne n'est donc pas entièrement distante.
 - Le jugement « conforme au guide » reste le mien, par lecture : aucune réponse de référence automatisée. Claude ajoute parfois une nuance (« les extraits ne précisent pas… ») qui est exacte mais n'était pas demandée.
 - **Confidentialité** : cette mesure a envoyé des extraits du guide **fictif** à un service tiers. Pour des documents réels, c'est une décision à prendre document par document (règle du projet : Claude uniquement sur des extraits publics).
+
+## Mesure 4 — test d'ordre inversé : le modèle cite-t-il d'après le contenu ? (story 03b)
+
+Commande : `mini-rag-eval-answers --runs 3 --best-last --show-answers`. Question posée par la mesure 3 : 93 citations sur 94 valaient `[1]`, l'extrait classé premier, qui était toujours la bonne page. Impossible de savoir si Claude lisait ou citait par habitude. Ici, on présente les extraits dans l'ordre **inverse** du classement : la meilleure page porte le numéro le plus élevé (`[4]` quand `k = 4`).
+
+**Conditions** : identiques à la mesure 3 (Claude Haiku 5.5, `bge-m3`, `k = 4`, seuil `0,55`, 12 questions du guide + 4 hors sujet, 3 passages), sauf l'ordre de présentation. Quand le prompt déborde, on retire d'abord les extraits les moins bien classés, puis on renverse l'ordre (testé).
+
+**Prédiction** : aucune écrite à l'avance. Deux issues étaient possibles : si Claude cite `[4]`, il lit le contenu ; s'il cite `[1]`, c'était de l'habitude et le « 100 % » de la mesure 3 ne prouvait rien.
+
+**Résultats**
+
+| Métrique | Mesure 3 (meilleur en premier) | Mesure 4 (meilleur en dernier) |
+|---|---|---|
+| Numéros de citation écrits | 93 × `[1]`, 1 × `[2]` | **90 × `[4]`, 3 × `[3]`, 0 × `[1]`** |
+| Réponses données (guide) | 36/36 | 34/36 |
+| Citations vérifiées | 36/36 | 34/34 |
+| Bonne page citée | 36/36 | 34/36 = 94 % |
+| Refus à tort | 0/36 | 2/36 (question 4, deux passages sur trois) |
+| Réponses inventées hors sujet | 0/12 | 0/12 |
+| Tokens / durée | 48 015 / 49,7 s | 49 347 / 61,4 s |
+
+**Ce que ça dit**
+- **Claude Haiku 5.5 cite d'après le contenu, pas par habitude** : quand la meilleure page change de numéro, ses citations suivent (de `[1]` à `[4]`, et plus aucun `[1]`). L'hypothèse « citation par habitude » est écartée **pour ce modèle**, sur ce corpus.
+- Les citations restent toutes vérifiables : aucun numéro inventé, y compris dans l'ordre inversé.
+
+**Ce que ça révèle**
+- **Une sensibilité à l'ordre sur une question limite** : la question 4 (« Où puis-je télécharger le récapitulatif ? ») est refusée 2 fois sur 3, alors qu'avec le meilleur extrait en premier elle était répondue 3 fois sur 3. Le texte dit qu'un récapitulatif annuel existe et que les **factures** se téléchargent dans « Documents », sans écrire explicitement où se télécharge le récapitulatif : la question est à la frontière, et le modèle l'interprète tantôt généreusement, tantôt strictement selon l'ordre. Le troisième passage est une réponse **mixte** (elle cite `[4]` puis conclut « Je ne sais pas ») : notre détection du refus ne regarde que le début de la réponse, donc elle la compte comme répondue.
+- Il faudra durcir la question ou la détection : décision à prendre, sans modifier ce corpus.
+
+**Ce que ça ne dit pas**
+- Un seul modèle (Haiku 5.5), 12 questions, un corpus fictif trop facile ; le modèle local `llama3.2:3b` n'a **pas** été testé dans cet ordre (non lancé : consigne de ne rien faire tourner en local).
+- Les 3 citations `[3]` accompagnent un `[4]` dans la question 8 : un second extrait cité en appui ; sa pertinence n'est pas évaluée automatiquement.
+- Le biais de position est un phénomène connu des modèles de langage ; un seul ordre testé (inversé) ne l'épuise pas (ordre aléatoire, extraits au milieu).

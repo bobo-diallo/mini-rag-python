@@ -96,6 +96,8 @@ Les analogies sont des repères, pas des équivalences exactes : elles aident à
 
 **Corpus trop facile (benchmark saturé)** : quand tous les modèles obtiennent 100 %, la mesure ne distingue plus rien. Il faut alors un corpus plus difficile, sans modifier l'ancien.
 
+**Biais de position** : la tendance d'un modèle à privilégier un extrait à cause de sa place dans le prompt (le premier, ou le dernier) plutôt que de son contenu. Pour le détecter, on change l'ordre de présentation : si les citations changent de numéro en suivant le contenu, le modèle lit ; si elles ne bougent pas, il suit sa place. Une réponse qui change selon l'ordre signale aussi une question à la frontière.
+
 **Test de mutation (à la main)** : on casse le code volontairement pour vérifier que les tests s'en aperçoivent. Un test qui ne peut jamais échouer ne prouve rien.
 
 ---
