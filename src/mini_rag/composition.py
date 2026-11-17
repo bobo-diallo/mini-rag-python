@@ -55,6 +55,7 @@ def build_answerer(
     *,
     embedder: Embedder | None = None,
     chat_model: ChatModel | None = None,
+    best_last: bool = False,
 ) -> Answerer:
     """Indexe les chunks et rend un Answerer prêt à répondre. `embedder` et `chat_model` remplacent Ollama (tests)."""
     # Le modèle de génération d'abord : s'il est mal configuré, on échoue avant de calculer le moindre vecteur.
@@ -67,5 +68,6 @@ def build_answerer(
         min_score=settings.min_score,
         context_limit=settings.num_ctx,
         max_output_tokens=settings.max_output_tokens,
+        best_last=best_last,
     )
     return Answerer(retriever, chat_model, options)

@@ -71,3 +71,13 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/out-of-scope-questions.json`), prédiction écrite avant. **Mesure 2** (`llama3.2:3b` local, 1 passage) : 5/12 refus à tort. **Mesure 3** (Claude Haiku 5.5, 3 passages) : 36/36 réponses, 36/36 citations vérifiées, 0 réponse inventée hors sujet, 0 refus à tort ; 93 citations sur 94 sont `[1]`, donc la qualité de la citation n'est pas encore prouvée ; voir `docs/evaluations.md`. **Calibration du seuil et corpus plus difficile : reportés**
 - [ ] h. Glossaire, carte de l'écosystème, suivi
 
+## Story 03b — Test d'ordre inversé des extraits
+- **Branche :** `story/03b-citation-order-test`
+- **PR :** — (sur `/push`)
+- **Statut :** 🔄 en cours
+- **Test de réussite :** savoir si le modèle cite d'après le contenu des extraits ou d'après leur numéro
+
+- [x] Option `best_last` (Answerer, assemblage, `--best-last` de la commande de mesure), avec mutations
+- [x] **Mesure 4** (Claude Haiku 5.5, 3 passages, meilleur extrait en dernier) : 90 citations `[4]`, 0 `[1]` : le modèle cite d'après le contenu ; sensibilité à l'ordre sur la question 4 ; voir `docs/evaluations.md`
+- [ ] Décider quoi faire de la réponse mixte (citation puis « Je ne sais pas ») et de la question 4
+

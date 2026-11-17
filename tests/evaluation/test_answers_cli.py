@@ -32,9 +32,11 @@ class ScriptedChatModel(ChatModel):
     def __init__(self, text: str = "C'est là [1].") -> None:
         self.text = text
         self.calls = 0
+        self.prompts: list[str] = []
 
     def generate(self, prompt: str) -> Completion:
         self.calls += 1
+        self.prompts.append(prompt)
         return Completion(text=self.text, tokens=TokenUsage(prompt=100, generated=10))
 
 
@@ -168,3 +170,23 @@ def test_claude_selected_without_a_key_is_reported_clearly(workspace, capsys):
     assert code == 1
     assert "ANTHROPIC_API_KEY" in captured.err
     assert "Traceback" not in captured.err
+
+
+def test_best_last_flag_presents_the_best_extract_with_the_last_number_and_says_so(workspace, capsys):
+    workspace["questions"].write_text(json.dumps([{"question": "premiere page ?", "expected_page": 1}]))
+    model = ScriptedChatModel()
+
+    run(workspace, chat_model=model, extra=["--best-last"])
+
+    assert "[2] Premiere page fictive" in model.prompts[0]  # la page 1 est la mieux classée : elle passe en dernier
+    assert "meilleur extrait en dernier" in capsys.readouterr().out
+
+
+def test_without_the_flag_the_best_extract_comes_first(workspace, capsys):
+    workspace["questions"].write_text(json.dumps([{"question": "premiere page ?", "expected_page": 1}]))
+    model = ScriptedChatModel()
+
+    run(workspace, chat_model=model)
+
+    assert "[1] Premiere page fictive" in model.prompts[0]
+    assert "meilleur extrait en premier" in capsys.readouterr().out
