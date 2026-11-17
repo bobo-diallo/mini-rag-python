@@ -24,6 +24,7 @@ Portage en Python du projet `mini-rag-local` (TypeScript, dossier voisin), puis 
 - [x] Story 00b : feuille de route étendue + glossaire (PR #1)
 - [x] Story 01 : lecture de PDF et découpage, parité avec la version TypeScript (29 chunks sur un PDF fictif)
 - [x] Story 02 : embeddings `bge-m3` et recherche par le sens (hit@3 = 100 %, MRR = 1,00 sur un corpus fictif trop facile)
+- [x] Story 03 : réponse avec citations vérifiées et refus (Claude Haiku 5.5 à distance : 36/36, 0 invention ; modèle local 3B : 5/12 refus à tort). Reste : guide d'apprentissage (`docs/apprentissage/`) et test d'ordre inversé des extraits
 - [ ] Phase 2b : Hugging Face et modèles ouverts
 - [ ] Phase 2 : LLM en production
 - [ ] Phase 3 : RAG évalué

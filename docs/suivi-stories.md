@@ -57,8 +57,8 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 
 ## Story 03 — Réponse avec citations vérifiées
 - **Branche :** `story/03-answers-with-citations`
-- **PR :** — (sur `/push`)
-- **Statut :** 🔄 en cours (plan validé)
+- **PR :** à renseigner après la fusion
+- **Statut :** ✅ code et mesures fusionnés ; 🔄 reste le guide d'apprentissage (h) et le test d'ordre inversé des extraits
 - **Test de réussite :** citations toutes présentes dans les extraits fournis, et « je ne sais pas » quand les documents ne contiennent pas la réponse (mesuré avec `llama3.2:3b`)
 
 - [x] a. `resolve_citations` : relier les « [n] » de la réponse aux extraits réels, signaler les numéros inventés
