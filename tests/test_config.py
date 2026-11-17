@@ -18,6 +18,9 @@ SETTING_VARIABLES = (
     "TOP_K",
     "MIN_SCORE",
     "CHAT_TIMEOUT",
+    "CHAT_PROVIDER",
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_MODEL",
 )
 
 
@@ -138,6 +141,47 @@ def test_the_window_must_leave_room_for_the_prompt_beyond_the_reserved_answer(mo
     monkeypatch.setenv("MAX_OUTPUT_TOKENS", "512")  # la réponse réservée dépasse la fenêtre entière
 
     with pytest.raises(ValidationError, match="fenêtre"):
+        Settings(_env_file=None)
+
+
+def test_the_chat_provider_defaults_to_local_ollama_and_claude_settings_are_empty_by_default():
+    settings = Settings(_env_file=None)
+
+    assert settings.chat_provider == "ollama"
+    assert settings.anthropic_model == "claude-haiku-5-5"
+    assert settings.anthropic_api_key is None
+
+
+def test_claude_can_be_selected_from_the_environment(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("CHAT_PROVIDER", "anthropic")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-secret-123")
+    monkeypatch.setenv("ANTHROPIC_MODEL", "claude-sonnet-5-5")
+
+    settings = Settings(_env_file=None)
+
+    assert settings.chat_provider == "anthropic"
+    assert settings.anthropic_model == "claude-sonnet-5-5"
+    assert settings.anthropic_api_key.get_secret_value() == "sk-ant-secret-123"
+
+
+def test_the_api_key_is_read_from_the_dot_env_file(tmp_path: Path):
+    env_file = tmp_path / ".env"
+    env_file.write_text("ANTHROPIC_API_KEY=sk-ant-from-file\n")
+
+    assert Settings(_env_file=env_file).anthropic_api_key.get_secret_value() == "sk-ant-from-file"
+
+
+def test_the_api_key_never_appears_when_the_settings_are_printed():
+    settings = Settings(_env_file=None, anthropic_api_key="sk-ant-secret-123")
+
+    assert "sk-ant-secret-123" not in repr(settings)
+    assert "sk-ant-secret-123" not in str(settings)
+
+
+def test_an_unknown_chat_provider_is_rejected(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("CHAT_PROVIDER", "openai")
+
+    with pytest.raises(ValidationError):
         Settings(_env_file=None)
 
 

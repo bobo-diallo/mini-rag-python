@@ -152,3 +152,19 @@ def test_a_model_failure_is_reported_without_a_traceback(workspace, capsys):
     assert code == 1
     assert "Ollama injoignable (test)" in captured.err
     assert "Traceback" not in captured.err
+
+
+def test_claude_selected_without_a_key_is_reported_clearly(workspace, capsys):
+    settings = Settings(_env_file=None, chat_provider="anthropic")  # pas de clé
+
+    code = main(
+        ["--corpus", str(workspace["corpus"]), "--questions", str(workspace["questions"]),
+         "--out-of-scope", str(workspace["out_of_scope"])],
+        embedder=PageWordEmbedder(),
+        settings=settings,
+    )  # fmt: skip
+
+    captured = capsys.readouterr()
+    assert code == 1
+    assert "ANTHROPIC_API_KEY" in captured.err
+    assert "Traceback" not in captured.err

@@ -64,6 +64,7 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] a. `resolve_citations` : relier les « [n] » de la réponse aux extraits réels, signaler les numéros inventés
 - [x] b. `build_prompt`, `NO_ANSWER`, estimation des tokens
 - [x] c. `OllamaChatModel` (`httpx`, température 0), testé sans réseau puis contre le vrai `llama3.2:3b`
+- [x] c2. Génération à distance : `AnthropicChatModel` (Claude Haiku 5.5, SDK `anthropic`), choix par `CHAT_PROVIDER`, clé dans `SecretStr` lue depuis `.env`, échec avant tout calcul si la clé manque ; `pytest` n'appelle plus Ollama par défaut. **Pas encore testé contre le vrai service (clé d'API à créer)**
 - [x] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
 - [x] e. Réglages dans `Settings` et `.env.example` (modèle, `num_ctx`, nombre d'extraits, seuil)
 - [x] f. Commande `mini-rag-ask`

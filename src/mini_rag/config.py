@@ -6,8 +6,14 @@ Ordre de priorité (du plus fort au plus faible) :
 3. les valeurs par défaut ci-dessous.
 """
 
-from pydantic import Field, model_validator
+from typing import Literal
+
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class ConfigurationError(Exception):
+    """Un réglage nécessaire manque ou est inutilisable ; le message dit lequel et comment le corriger."""
 
 
 class Settings(BaseSettings):
@@ -30,6 +36,12 @@ class Settings(BaseSettings):
     top_k: int = Field(default=4, ge=1)  # nombre d'extraits retrouvés pour chaque question
     chat_timeout: float = Field(default=300.0, gt=0)  # secondes d'attente d'une réponse, avant d'abandonner
     min_score: float = Field(default=0.55, ge=-1.0, le=1.0)  # en dessous, on répond « je ne sais pas » sans appeler le modèle
+
+    # Qui rédige les réponses : « ollama » (sur cette machine) ou « anthropic » (Claude, à distance).
+    chat_provider: Literal["ollama", "anthropic"] = "ollama"
+    anthropic_model: str = "claude-haiku-5-5"
+    # SecretStr : la valeur n'apparaît jamais quand on affiche l'objet (logs, messages d'erreur).
+    anthropic_api_key: SecretStr | None = None
 
     @model_validator(mode="after")
     def _the_window_leaves_room_for_the_prompt(self) -> "Settings":

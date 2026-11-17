@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from mini_rag.composition import build_answerer
-from mini_rag.config import Settings
+from mini_rag.config import ConfigurationError, Settings
 from mini_rag.generation.answerer import Reply
 from mini_rag.generation.chat_model import ChatModel, GenerationError
 from mini_rag.ingestion.chunker import chunk_pages
@@ -43,7 +43,7 @@ def main(
     try:
         answerer = build_answerer(chunks, settings, embedder=embedder, chat_model=chat_model)
         reply = answerer.answer(question)
-    except (EmbeddingError, GenerationError) as error:
+    except (ConfigurationError, EmbeddingError, GenerationError) as error:
         return _fail(str(error))
 
     _print_reply(question, reply, settings, args.verbose)

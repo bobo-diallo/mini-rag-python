@@ -179,3 +179,22 @@ def test_a_failure_of_a_component_is_reported_without_a_traceback(corpus: Path, 
     assert code == 1
     assert message in captured.err
     assert "Traceback" not in captured.err
+
+
+def test_claude_selected_without_a_key_is_reported_clearly_and_before_any_work(corpus: Path, capsys):
+    calls = []
+
+    class RecordingEmbedder(PageWordEmbedder):
+        def embed_documents(self, texts):
+            calls.append(len(texts))
+            return super().embed_documents(texts)
+
+    settings = Settings(_env_file=None, chat_provider="anthropic")  # pas de clé
+
+    code = main(["premiere page ?", "--corpus", str(corpus)], embedder=RecordingEmbedder(), settings=settings)
+
+    captured = capsys.readouterr()
+    assert code == 1
+    assert "ANTHROPIC_API_KEY" in captured.err
+    assert "Traceback" not in captured.err
+    assert calls == []  # aucun vecteur calculé pour rien

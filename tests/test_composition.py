@@ -3,10 +3,14 @@
 import re
 from collections.abc import Sequence
 
-from mini_rag.composition import build_answerer
-from mini_rag.config import Settings
+import pytest
+
+from mini_rag.composition import build_answerer, build_chat_model
+from mini_rag.config import ConfigurationError, Settings
 from mini_rag.domain.models import Chunk, Source
+from mini_rag.generation.anthropic_chat_model import AnthropicChatModel
 from mini_rag.generation.chat_model import ChatModel, Completion
+from mini_rag.generation.ollama_chat_model import OllamaChatModel
 from mini_rag.retrieval.embedder import Embedder
 
 
@@ -60,3 +64,40 @@ def test_min_score_comes_from_the_settings_and_a_refusal_does_not_call_the_model
 
     assert reply.answered is False
     assert model.calls == 0
+
+
+# --- Choix du fournisseur de génération --------------------------------------------------------
+
+
+def test_the_default_provider_is_local_ollama():
+    assert isinstance(build_chat_model(Settings(_env_file=None)), OllamaChatModel)
+
+
+def test_the_anthropic_provider_builds_a_claude_client_without_any_network_call():
+    settings = Settings(_env_file=None, chat_provider="anthropic", anthropic_api_key="sk-ant-test")
+
+    assert isinstance(build_chat_model(settings), AnthropicChatModel)
+
+
+@pytest.mark.parametrize("key", [None, "", "   "])
+def test_the_anthropic_provider_without_a_key_explains_what_to_set(key):
+    settings = Settings(_env_file=None, chat_provider="anthropic", anthropic_api_key=key)
+
+    with pytest.raises(ConfigurationError, match="ANTHROPIC_API_KEY"):
+        build_chat_model(settings)
+
+
+def test_a_missing_key_fails_before_any_embedding_work_is_done():
+    calls = []
+
+    class RecordingEmbedder(WordEmbedder):
+        def embed_documents(self, texts):
+            calls.append(len(texts))
+            return super().embed_documents(texts)
+
+    settings = Settings(_env_file=None, chat_provider="anthropic")  # pas de clé
+
+    with pytest.raises(ConfigurationError):
+        build_answerer(CHUNKS, settings, embedder=RecordingEmbedder())
+
+    assert calls == []  # on n'a calculé aucun vecteur pour rien

@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from mini_rag.composition import build_answerer
-from mini_rag.config import Settings
+from mini_rag.config import ConfigurationError, Settings
 from mini_rag.evaluation.answer_eval import AnswerSample, evaluate_answers, summarize
 from mini_rag.evaluation.corpus import CorpusError, find_single_pdf
 from mini_rag.evaluation.questions import load_out_of_scope_questions, load_questions
@@ -48,7 +48,7 @@ def main(
     try:
         answerer = build_answerer(chunks, settings, embedder=embedder, chat_model=chat_model)
         samples = evaluate_answers(answerer, questions, out_of_scope, args.runs)
-    except (EmbeddingError, GenerationError) as error:
+    except (ConfigurationError, EmbeddingError, GenerationError) as error:
         return _fail(str(error))
 
     embedding_label = type(embedder).__name__ if embedder else settings.embedding_model
