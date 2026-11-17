@@ -18,6 +18,7 @@
 | Appels HTTP | `httpx` | `fetch` | 1-2 | synchrone ou asynchrone avec la même API |
 | Évaluation de la recherche | module maison `mini_rag/evaluation` (rang, hit@k, MRR, écart) | `eval-retrieval.ts` | 1 | mesurer avant/après chaque changement, avec la référence du hasard |
 | API Claude | SDK `anthropic` | `@anthropic-ai/sdk` | 2 | modèle `claude-haiku-5-5` par défaut |
+| Génération à distance | SDK `anthropic` (`AnthropicChatModel`, Claude Haiku 5.5) | `@anthropic-ai/sdk` | 3 | rapide et peu coûteux ; les extraits quittent la machine, donc réservé aux documents publics. Alternative écartée : modèle ouvert hébergé sur Hugging Face, dont les crédits gratuits et les prix par token sont incertains |
 | Journalisation | module `logging` | `console` + fichier jsonl | 2 | jamais `print` en dehors du débogage |
 | Typage statique | `mypy` ou `pyright` | `tsc` | 2 | vérifier les annotations, optionnel mais recommandé |
 | Style et erreurs bêtes | `ruff` | ESLint + Prettier | 2 | un seul outil rapide pour lint et format |

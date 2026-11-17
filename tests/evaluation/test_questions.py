@@ -50,3 +50,32 @@ def test_a_missing_file_fails_clearly(tmp_path: Path):
 def test_invalid_content_is_rejected_with_a_message_naming_the_problem(tmp_path: Path, content, expected_message):
     with pytest.raises(ValueError, match=expected_message):
         load_questions(write(tmp_path, content))
+
+
+# --- Questions hors sujet : celles dont les documents ne contiennent PAS la réponse --------------
+
+from mini_rag.evaluation.questions import load_out_of_scope_questions  # noqa: E402
+
+REAL_OUT_OF_SCOPE_FILE = Path(__file__).parent.parent.parent / "eval" / "out-of-scope-questions.json"
+
+
+def test_loads_out_of_scope_questions_as_plain_texts(tmp_path: Path):
+    path = write(tmp_path, [{"question": "Capitale du Japon ?"}, {"question": "Et de la Chine ?"}])
+
+    assert load_out_of_scope_questions(path) == ["Capitale du Japon ?", "Et de la Chine ?"]
+
+
+def test_the_real_out_of_scope_file_has_four_questions_ending_with_a_question_mark():
+    questions = load_out_of_scope_questions(REAL_OUT_OF_SCOPE_FILE)
+
+    assert len(questions) == 4
+    assert all(q.endswith("?") for q in questions)
+
+
+@pytest.mark.parametrize(
+    "content",
+    [{"question": "pas une liste"}, [], ["pas un objet"], [{"autre": 1}], [{"question": "   "}]],
+)
+def test_invalid_out_of_scope_content_is_rejected(tmp_path: Path, content):
+    with pytest.raises(ValueError):
+        load_out_of_scope_questions(write(tmp_path, content))

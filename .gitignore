@@ -8,9 +8,21 @@ __pycache__/
 .env
 .DS_Store
 
-# Réglages d'éditeur : personnels, jamais publiés
+# Réglages d'éditeur et de machine : personnels, jamais publiés
 .vscode/
 .idea/
+.vs/
+.fleet/
+*.iml
+*.code-workspace
+*.swp
+
+# Bases locales, dépendances et dossiers de build
+*.db
+*.sqlite3
+node_modules/
+.angular/
+dist/
 
 # Documents des utilisateurs et index générés : jamais publiés
 data/

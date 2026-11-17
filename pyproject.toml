@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "pypdf>=7",  # lecture des PDF, page par page
     "httpx>=0.28",  # appels HTTP vers Ollama
+    "anthropic>=2.9",  # client de l'API Claude (génération à distance)
     "pydantic-settings>=2",  # configuration lue depuis l'environnement et .env
 ]
 
@@ -14,6 +15,8 @@ dependencies = [
 # Après `pip install -e .`, la commande `mini-rag-chunks` lance la fonction `main` de mini_rag/cli.py.
 mini-rag-chunks = "mini_rag.cli:main"
 mini-rag-eval-retrieval = "mini_rag.evaluation.cli:main"
+mini-rag-ask = "mini_rag.generation.cli:main"
+mini-rag-eval-answers = "mini_rag.evaluation.answers_cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -25,7 +28,9 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # Deux fichiers de test de même nom dans des dossiers différents ne se télescopent plus.
-addopts = ["--import-mode=importlib"]
+# `-m "not ollama"` : par défaut, `pytest` n'appelle jamais le vrai Ollama (lent, lourd pour la machine).
+# Pour lancer les tests d'intégration : `pytest -m ollama`.
+addopts = ["--import-mode=importlib", "-m", "not ollama"]
 markers = ["ollama: test d'intégration qui exige un serveur Ollama avec le modèle bge-m3"]
 # Permet d'écrire « from mini_rag import ... » dans les tests sans installer le paquet.
 pythonpath = ["src"]
