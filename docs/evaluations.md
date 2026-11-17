@@ -104,3 +104,38 @@ Commande : `mini-rag-eval-answers --runs 1 --show-answers`, lancée sous `caffei
 - Le jugement « conforme au guide » est le mien, par lecture : il n'y a pas de réponse de référence automatisée.
 
 **Suite proposée** (un changement à la fois) : (1) répéter ce passage 3 fois pour mesurer la variabilité ; (2) essayer la variante de prompt avec un exemple de réponse citée, que la version TypeScript avait prévue pour les petits modèles, puis comparer sur 3 passages ; (3) ensuite seulement, calibrer le seuil.
+
+## Mesure 3 — réponses avec citations, Claude Haiku 5.5 à distance (story 03, étape g)
+
+Commande : `mini-rag-eval-answers --runs 3 --show-answers` avec `CHAT_PROVIDER=anthropic`. Une première passe unique (même résultat) a précédé ; son en-tête annonçait par erreur `llama3.2:3b` : le rapport affichait le nom du modèle Ollama quel que soit le fournisseur. Corrigé et testé (`describe_chat_model`), puis mesure refaite sur 3 passages.
+
+**Conditions** : recherche `bge-m3` (embeddings toujours calculés par Ollama, en local), génération `claude-haiku-5-5` via l'API d'Anthropic (effort `low`, pas de température modifiable), `k = 4`, seuil `0,55`, mêmes 12 questions du guide et 4 questions hors sujet que la mesure 2, mêmes réglages de recherche. **3 passages par question** (48 015 tokens au total).
+
+**Résultats comparés** (mêmes questions, même recherche, même prompt)
+
+| Métrique | Mesure 2 : `llama3.2:3b` local, 1 passage | Mesure 3 : Claude Haiku 5.5, 3 passages |
+|---|---|---|
+| Réponses données (questions du guide) | 7/12 = 58 % | **36/36 = 100 %** |
+| Refus à tort | 5/12 = 42 % | **0/36 = 0 %** |
+| Citations vérifiées (parmi les réponses données) | 5/7 = 71 % | 36/36 = 100 % |
+| Numéros de citation inventés | 0 | 0 |
+| Bonne page citée | 5/12 = 42 % | 36/36 = 100 % |
+| Refus justifiés hors sujet | 4/4 | 12/12 |
+| dont par le seuil seul | 3/4 | 9/12 |
+| Réponses inventées hors sujet | 0/4 | **0/12** |
+| Durée totale | 371 s (un passage) | 49,7 s (trois passages) |
+| Coût | 0 (mais 100 % du processeur) | entre 0,5 et 2,4 centimes pour les 3 passages (borne basse : tous les tokens facturés comme lus ; borne haute : tous comme écrits, au tarif relevé dans la documentation de l'API) |
+
+**Ce que ça dit**
+- **Les 5 refus à tort de la mesure 2 venaient du petit modèle**, pas de la recherche ni de notre prompt : avec le même prompt et les mêmes extraits, Claude répond aux 12 questions à chaque passage. L'hypothèse posée à l'étape précédente est confirmée.
+- Les réponses sont stables d'un passage à l'autre : aucun écart sur 36 réponses (même nombre de réponses, de citations, de refus). C'est un échantillon petit, mais il ne montre aucune variabilité.
+- La question 15 (application mobile), la seule hors sujet qui franchit le seuil, est refusée par Claude les 3 fois : le garde-fou du modèle fonctionne aussi à distance.
+- Ce passage est environ 7 fois plus rapide que la mesure 2 à nombre égal de questions, et il ne charge plus la machine.
+
+**Ce que ça ne dit pas**
+- **Les citations ne distinguent pas encore un modèle qui lit d'un modèle qui devine** : sur 94 numéros de citation écrits, **93 sont `[1]`**. L'extrait classé premier est toujours la bonne page (mesure 1), donc citer `[1]` tombe toujours juste. Pour savoir si le modèle choisit la source d'après le contenu, il faut un test où la bonne page n'est **pas** en première position (extraits présentés dans l'ordre inverse, par exemple).
+- **Le corpus est trop facile** : 100 % partout, on ne peut plus départager deux modèles. Il faut un corpus plus difficile, créé à côté de celui-ci, sans le modifier.
+- 12 questions, un corpus fictif de 10 pages, des questions hors sujet peu nombreuses (4) : ce n'est pas un document réel avec du bruit, des tableaux, des pages longues.
+- Les embeddings sont encore calculés **en local** ; la chaîne n'est donc pas entièrement distante.
+- Le jugement « conforme au guide » reste le mien, par lecture : aucune réponse de référence automatisée. Claude ajoute parfois une nuance (« les extraits ne précisent pas… ») qui est exacte mais n'était pas demandée.
+- **Confidentialité** : cette mesure a envoyé des extraits du guide **fictif** à un service tiers. Pour des documents réels, c'est une décision à prendre document par document (règle du projet : Claude uniquement sur des extraits publics).

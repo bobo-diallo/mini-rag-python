@@ -68,6 +68,6 @@ Une section par story : branche, PR, statut (✅ terminée, 🔄 en cours, 📋 
 - [x] d. `Answerer` : seuil de refus sans appeler le modèle, « je ne sais pas » reconnu, extraits retirés si le prompt déborde
 - [x] e. Réglages dans `Settings` et `.env.example` (modèle, `num_ctx`, nombre d'extraits, seuil)
 - [x] f. Commande `mini-rag-ask`
-- [ ] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/out-of-scope-questions.json`), prédiction écrite avant. **Mesure 2 faite (1 passage)** : 0 citation inventée, 0 réponse inventée hors sujet, mais 5/12 refus à tort par le modèle ; voir `docs/evaluations.md`. Reste : 3 passages, variante de prompt avec exemple, calibration du seuil
+- [x] g. Mesure : 12 questions du guide + 4 hors sujet (`eval/out-of-scope-questions.json`), prédiction écrite avant. **Mesure 2** (`llama3.2:3b` local, 1 passage) : 5/12 refus à tort. **Mesure 3** (Claude Haiku 5.5, 3 passages) : 36/36 réponses, 36/36 citations vérifiées, 0 réponse inventée hors sujet, 0 refus à tort ; 93 citations sur 94 sont `[1]`, donc la qualité de la citation n'est pas encore prouvée ; voir `docs/evaluations.md`. **Calibration du seuil et corpus plus difficile : reportés**
 - [ ] h. Glossaire, carte de l'écosystème, suivi
 
